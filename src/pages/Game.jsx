@@ -3,6 +3,7 @@ import { React, useEffect } from 'react'
 const Game = () => {
   
   const width = 28
+  let reactmanCurrentIndex = 490
 
   const layout = [
     1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
@@ -43,10 +44,10 @@ const Game = () => {
 
   const squares = []
 
-  
-
   useEffect(() => {
-    console.log("useEffect körs")
+    // console.log("useEffect körs")
+
+    document.body.style.overflow = "hidden"
 
     const grid = document.getElementById('grid')
     const score = document.getElementById('score')
@@ -74,13 +75,46 @@ const Game = () => {
 
     generateBoard()
 
-  }, [squares])
-  
-  // console.log("grid ==>", grid)
+    squares[reactmanCurrentIndex].classList.add('react-man')
 
-  // border border-orange-500
+  }, [])
+
+  const moveReactman = (e) => {
+
+    console.log("case ==>", e.keyCode)
+
+    squares[reactmanCurrentIndex].classList.remove('react-man')
+
+    switch(e.keyCode) {
+      case 37:
+        if (reactmanCurrentIndex % width !== 0 && !squares[reactmanCurrentIndex - 1].classList.contains('wall') && !squares[reactmanCurrentIndex - 1].classList.contains('ghost-spawn')) reactmanCurrentIndex -= 1
+
+        if (reactmanCurrentIndex - 1 === 363) {
+          reactmanCurrentIndex = 391
+        }
+
+        break
+      case 38: 
+        if (reactmanCurrentIndex - width >= 0 && !squares[reactmanCurrentIndex - width].classList.contains('wall') && !squares[reactmanCurrentIndex - width].classList.contains('ghost-spawn')) reactmanCurrentIndex -= width
+        break
+      case 39:
+        if (reactmanCurrentIndex % width < width - 1 && !squares[reactmanCurrentIndex + 1].classList.contains('wall') && !squares[reactmanCurrentIndex + 1].classList.contains('ghost-spawn')) reactmanCurrentIndex += 1
+
+        if (reactmanCurrentIndex + 1 === 392) {
+          reactmanCurrentIndex = 364
+        }
+
+        break
+      case 40:
+        if (reactmanCurrentIndex + width < width * width && !squares[reactmanCurrentIndex + width].classList.contains('wall') && !squares[reactmanCurrentIndex + width].classList.contains('ghost-spawn')) reactmanCurrentIndex += width
+        break
+    }
+
+    squares[reactmanCurrentIndex].classList.add('react-man')
+  }
+
   return (
-    <div className="">
+    <div tabIndex={0} onKeyDown={moveReactman}>
         <h1 className="mb-5">Game</h1>
 
         <div id="grid" className="bg-white w-[35rem] h-[35rem] mx-auto my-auto flex flex-wrap ">
