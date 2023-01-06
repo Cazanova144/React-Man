@@ -90,7 +90,14 @@ const Game = () => {
 
     squares[reactmanCurrentIndex].classList.add('react-man')
 
+    ghosts.forEach(ghost => {
+      squares[ghost.currentIndex].classList.add(ghost.className)
+      squares[ghost.currentIndex].classList.add('ghost')
+    })
+
   }, [])
+
+  // function for eating pellets
 
   const pelletEaten = () => {
     if (squares[reactmanCurrentIndex].classList.contains('pellet')) {
@@ -107,6 +114,26 @@ const Game = () => {
     }
   }
 
+  // class for ghosts 
+  class Ghost {
+    constructor(className, startIndex, speed) {
+      this.className = className
+      this.startIndex = startIndex
+      this.speed = speed
+      this.currentIndex = startIndex
+      this.timerId = NaN
+    }
+  }
+
+  const ghosts = [
+    new Ghost('blinky', 348, 250),
+    new Ghost('pinky', 376, 400),
+    new Ghost('inky', 351, 300),
+    new Ghost('clyde', 379, 500)
+  ]
+
+  
+
   // useEffect(() => {
   //   console.log("score ==>", score)
   // }, [score])
@@ -115,7 +142,7 @@ const Game = () => {
   //   console.log("reactManCurrentIndex ==>", reactmanCurrentIndex)
   // }, [reactmanCurrentIndex])
 
-  const moveReactman = async (e) => {
+  const moveReactman = (e) => {
 
     // console.log("case ==>", e.keyCode)
 
@@ -123,7 +150,7 @@ const Game = () => {
 
     console.log("squares[reactmanCurrentIndex] ==>", squares[reactmanCurrentIndex])
 
-    await squares[reactmanCurrentIndex].classList.remove('react-man')
+    squares[reactmanCurrentIndex].classList.remove('react-man')
 
     switch(e.keyCode) {
       case 37:
