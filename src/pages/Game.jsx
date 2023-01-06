@@ -122,6 +122,30 @@ const Game = () => {
 
       } else direction = directions[Math.floor(Math.random() * directions.length)]
 
+      // if the ghost is in "fright-mode" ("scared")
+
+      if (ghost.isScared) {
+
+        // add class of "scared-ghost"
+        squares[ghost.currentIndex].classList.add('scared-ghost')
+      }
+
+      // if the ghost is in "fright-mode" AND React-Man runs into it
+
+      if (ghost.isScared && squares[ghost.currentIndex].classList.contains('react-man')) {
+
+        // remove ghost
+        squares[ghost.currentIndex].classList.remove(ghost.className, 'ghost', 'scared-ghost')
+
+        // set currentIndex to it's starting point
+        ghost.currentIndex = ghost.startIndex
+
+        // add 100 to scoreboard
+        score += 100
+
+        // re-add ghost to start position
+        squares[ghost.currentIndex].classList.add(ghost.className, 'ghost')
+      }
     }, ghost.speed)
 
   }
@@ -133,17 +157,34 @@ const Game = () => {
       const scoreDisplay = document.getElementById('score')
 
       // console.log("score ==>", score)
-      console.log("scoreDisplay ==>", scoreDisplay)
+      // console.log("scoreDisplay ==>", scoreDisplay)
       score++
       scoreDisplay.innerHTML = score
-      console.log("score ==>", score)
+      // console.log("score ==>", score)
       // setScore(score + 1)
       // console.log("score ==>", score)
       squares[reactmanCurrentIndex].classList.remove('pellet')
     }
   }
 
+  // function for eating power pellets 
 
+  const powerPelletEaten = () => {
+    if (squares[reactmanCurrentIndex].classList.contains('power-pellet')) {
+      // console.log("powerPelletEaten works!")
+      score += 10
+      ghosts.forEach(ghost => ghost.isScared = true)
+      setTimeout(stopFrightMode, 10000)
+      squares[reactmanCurrentIndex].classList.remove('power-pellet')
+    }
+  }
+
+  // function for making ghosts get out of "fright-mode" (stop them from being "scared")
+
+  const stopFrightMode = () => {
+    ghosts.forEach(ghost => ghost.isScared = false)
+    // console.log("stopFrightMode works!")
+  }
 
   // class for ghosts 
   class Ghost {
@@ -153,6 +194,7 @@ const Game = () => {
       this.speed = speed
       this.currentIndex = startIndex
       this.timerId = NaN
+      this.isScared = false
     }
   }
 
@@ -177,9 +219,9 @@ const Game = () => {
 
     // console.log("case ==>", e.keyCode)
 
-    console.log("reactmanCurrentIndex before ==>", reactmanCurrentIndex)
+    // console.log("reactmanCurrentIndex before ==>", reactmanCurrentIndex)
 
-    console.log("squares[reactmanCurrentIndex] ==>", squares[reactmanCurrentIndex])
+    // console.log("squares[reactmanCurrentIndex] ==>", squares[reactmanCurrentIndex])
 
     squares[reactmanCurrentIndex].classList.remove('react-man')
 
@@ -191,13 +233,13 @@ const Game = () => {
           reactmanCurrentIndex = 391
         }
 
-        console.log("reactmanCurrentIndex in case ==>", reactmanCurrentIndex)
+        // console.log("reactmanCurrentIndex in case ==>", reactmanCurrentIndex)
         
         break
       case 38: 
         if (reactmanCurrentIndex - width >= 0 && !squares[reactmanCurrentIndex - width].classList.contains('wall') && !squares[reactmanCurrentIndex - width].classList.contains('ghost-spawn')) reactmanCurrentIndex -= width
 
-        console.log("reactmanCurrentIndex in case ==>", reactmanCurrentIndex)
+        // console.log("reactmanCurrentIndex in case ==>", reactmanCurrentIndex)
 
         break
       case 39:
@@ -207,22 +249,25 @@ const Game = () => {
           reactmanCurrentIndex = 364
         }
 
-        console.log("reactmanCurrentIndex in case ==>", reactmanCurrentIndex)
+        // console.log("reactmanCurrentIndex in case ==>", reactmanCurrentIndex)
 
         break
       case 40:
         if (reactmanCurrentIndex + width < width * width && !squares[reactmanCurrentIndex + width].classList.contains('wall') && !squares[reactmanCurrentIndex + width].classList.contains('ghost-spawn')) reactmanCurrentIndex += width
 
-        console.log("reactmanCurrentIndex in case ==>", reactmanCurrentIndex)
+        // console.log("reactmanCurrentIndex in case ==>", reactmanCurrentIndex)
 
         break
     }
 
     squares[reactmanCurrentIndex].classList.add('react-man')
 
-    console.log("reactmanCurrentIndex after ==>", reactmanCurrentIndex)
+    // console.log("reactmanCurrentIndex after ==>", reactmanCurrentIndex)
+
+    // functions for different events in game
 
     pelletEaten()
+    powerPelletEaten()
   }
 
   return (
