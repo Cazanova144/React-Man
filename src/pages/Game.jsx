@@ -9,6 +9,7 @@ const Game = () => {
   const [finalScore, setFinalScore] = useState(0)
   let score = 0
   const [lost, setLost] = useState(false)
+  const [won, setWon] = useState(false)
 
   // scoreDisplay.innerText = score
 
@@ -206,6 +207,19 @@ const Game = () => {
     }
   }
 
+  const checkForWin = () => {
+
+    // if you win the level
+    if (score >= 274) {
+      
+      // set won state to "true"
+      setWon(true)
+
+      // set final score state to current score
+      setFinalScore(score)
+    }
+  }
+
   // class for ghosts 
   class Ghost {
     constructor(className, startIndex, speed) {
@@ -277,25 +291,34 @@ const Game = () => {
     pelletEaten()
     powerPelletEaten()
     checkForGameOver()
+    checkForWin()
   }
 
   return (
     <div tabIndex={0} onKeyDown={moveReactman}>
       <h1 className="mb-5">Game</h1>
 
-      {!lost ? 
+
+
+      {!lost && !won ? 
         <div>
           <div id="grid" className="bg-white w-[35rem] h-[35rem] mx-auto my-auto flex flex-wrap " />
 
           <h3>Score: <span id="score"></span></h3>
         </div> 
-      :
+      : lost ?
         <div>
           <h1>Game Over!</h1>
 
           <h2>Final score: {finalScore}</h2>
         </div>
-      }
+      : won ?
+        <div>
+          <h1>You Beat The Level!</h1>
+
+          <h2>Final Score: {finalScore}</h2>
+        </div>
+      : ""}
     </div>
   )
 }
