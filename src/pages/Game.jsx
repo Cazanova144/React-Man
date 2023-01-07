@@ -6,8 +6,9 @@ const Game = () => {
   const width = 28
   let reactmanCurrentIndex = 490
   // const [reactmanCurrentIndex, setReactmanCurrentIndex] = useState(490)
-  // const [score, setScore] = useState(0)
+  const [finalScore, setFinalScore] = useState(0)
   let score = 0
+  const [lost, setLost] = useState(false)
 
   // scoreDisplay.innerText = score
 
@@ -58,33 +59,33 @@ const Game = () => {
 
   const squares = []
 
+  const generateBoard = () => {
+    for (let i = 0; i < layout.length; i++) {
+      const square = document.createElement('div')
+      grid.appendChild(square)
+      squares.push(square)
+
+      // add layout to the board
+      if (layout[i] === 0) {
+        squares[i].classList.add('pellet')
+      } else if (layout[i] === 1) {
+        squares[i].classList.add('wall')
+      } else if (layout[i] === 2) {
+        squares[i].classList.add('ghost-spawn')
+      } else if (layout[i] === 3) {
+        squares[i].classList.add('power-pellet')
+      }
+
+      // console.log("funktionen körs")
+    }
+  }
+
   useEffect(() => {
     // console.log("useEffect körs")
 
     document.body.style.overflow = "hidden"
 
     const grid = document.getElementById('grid')
-
-    const generateBoard = () => {
-      for (let i = 0; i < layout.length; i++) {
-        const square = document.createElement('div')
-        grid.appendChild(square)
-        squares.push(square)
-  
-        // add layout to the board
-        if (layout[i] === 0) {
-          squares[i].classList.add('pellet')
-        } else if (layout[i] === 1) {
-          squares[i].classList.add('wall')
-        } else if (layout[i] === 2) {
-          squares[i].classList.add('ghost-spawn')
-        } else if (layout[i] === 3) {
-          squares[i].classList.add('power-pellet')
-        }
-  
-        // console.log("funktionen körs")
-      }
-    }
 
     generateBoard()
 
@@ -102,10 +103,14 @@ const Game = () => {
   // function for moving ghosts
 
   const moveGhost = (ghost) => {
+
     const directions = [-1, +1, width, -width]
     let direction = directions[Math.floor(Math.random() * directions.length)]
 
     ghost.timerId = setInterval(function() {
+      
+      // if (lost) return
+      // console.log("lost after return in moveGhost ==>", lost)
 
       // if next square is neither a wall or ghost, go there
 
@@ -156,7 +161,7 @@ const Game = () => {
     if (squares[reactmanCurrentIndex].classList.contains('pellet')) {
       const scoreDisplay = document.getElementById('score')
 
-      // console.log("score ==>", score)
+      console.log("score ==>", score)
       // console.log("scoreDisplay ==>", scoreDisplay)
       score++
       scoreDisplay.innerHTML = score
@@ -186,6 +191,21 @@ const Game = () => {
     // console.log("stopFrightMode works!")
   }
 
+  // check if player lost
+
+  const checkForGameOver = () => {
+
+    // if React-Man runs into a ghost, and that ghost isn't in fright-mode ("scared")
+    if (squares[reactmanCurrentIndex].classList.contains('ghost') && !squares[reactmanCurrentIndex].classList.contains('scared-ghost')) {
+
+      // set lost state to "true"
+      setLost(true)
+
+      // set final score state to current score
+      setFinalScore(score)
+    }
+  }
+
   // class for ghosts 
   class Ghost {
     constructor(className, startIndex, speed) {
@@ -204,16 +224,6 @@ const Game = () => {
     new Ghost('inky', 351, 300),
     new Ghost('clyde', 379, 500)
   ]
-
-  
-
-  // useEffect(() => {
-  //   console.log("score ==>", score)
-  // }, [score])
-
-  // useEffect(() => {
-  //   console.log("reactManCurrentIndex ==>", reactmanCurrentIndex)
-  // }, [reactmanCurrentIndex])
 
   const moveReactman = (e) => {
 
@@ -262,24 +272,30 @@ const Game = () => {
 
     squares[reactmanCurrentIndex].classList.add('react-man')
 
-    // console.log("reactmanCurrentIndex after ==>", reactmanCurrentIndex)
-
     // functions for different events in game
 
     pelletEaten()
     powerPelletEaten()
+    checkForGameOver()
   }
 
   return (
     <div tabIndex={0} onKeyDown={moveReactman}>
-        <h1 className="mb-5">Game</h1>
+      <h1 className="mb-5">Game</h1>
 
-        <div id="grid" className="bg-white w-[35rem] h-[35rem] mx-auto my-auto flex flex-wrap ">
-          
+      {!lost ? 
+        <div>
+          <div id="grid" className="bg-white w-[35rem] h-[35rem] mx-auto my-auto flex flex-wrap " />
+
+          <h3>Score: <span id="score"></span></h3>
+        </div> 
+      :
+        <div>
+          <h1>Game Over!</h1>
+
+          <h2>Final score: {finalScore}</h2>
         </div>
-
-        {/* <h3 id="score" className="my-5">Score :{score}</h3> */}
-        <h3>Score: <span id="score"></span></h3>
+      }
     </div>
   )
 }
