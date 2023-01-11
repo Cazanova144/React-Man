@@ -62,6 +62,7 @@ const Game = () => {
 
   const generateBoard = () => {
     for (let i = 0; i < layout.length; i++) {
+      const grid = document.getElementById('grid')
       const square = document.createElement('div')
       grid.appendChild(square)
       squares.push(square)
@@ -86,7 +87,6 @@ const Game = () => {
 
     document.body.style.overflow = "hidden"
 
-    const grid = document.getElementById('grid')
 
     generateBoard()
 
@@ -162,7 +162,7 @@ const Game = () => {
     if (squares[reactmanCurrentIndex].classList.contains('pellet')) {
       const scoreDisplay = document.getElementById('score')
 
-      console.log("score ==>", score)
+      // console.log("score ==>", score)
       // console.log("scoreDisplay ==>", scoreDisplay)
       score++
       scoreDisplay.innerHTML = score
@@ -210,7 +210,7 @@ const Game = () => {
   const checkForWin = () => {
 
     // if you win the level
-    if (score >= 274) {
+    if (score >= 274 && !document.getElementsByClassName('pellet').length && !document.getElementsByClassName('power-pellet').length) {
       
       // set won state to "true"
       setWon(true)
