@@ -5,6 +5,7 @@ const Game = () => {
 
   
   const tileSize = 32
+  const velocity = 2
 
   // console.log("scoreDisplay ==>", scoreDisplay)
   const width = 28
@@ -96,10 +97,12 @@ const Game = () => {
     const canvas = document.getElementById('grid')
     const ctx = canvas.getContext('2d')
     const tileMap = new TileMap(tileSize)
+    const reactman = tileMap.getReactman(velocity)
 
     const gameLoop = () => {
       // console.log("gameloop")
       tileMap.draw(ctx);
+      reactman.draw(ctx)
     }
 
     tileMap.setCanvasSize(canvas)

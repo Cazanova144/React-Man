@@ -1,61 +1,105 @@
-class Reactman {
-    constructor(x, y, startIndex, speed) {
+import pac0 from '../assets/images/pac0.png'
+import pac1 from '../assets/images/pac1.png'
+import pac2 from '../assets/images/pac2.png'
+import MovingDirection from './MovingDirection.js';
+
+export default class Reactman {
+    constructor(x, y, tileSize, velocity, tileMap) {
       this.x = x;
       this.y = y;
-      this.startIndex = startIndex;
-      this.speed = speed;
-      this.currentIndex = startIndex; 
+      this.tileSize = tileSize;
+      this.velocity = velocity;
+      this.tileMap = tileMap; 
 
-      this.currentDirection = null;
-      this.requestedDirection = null;
+      this.currentMovingDirection = null;
+      this.requestedMovingDirection = null;
+      
+      this.#loadReactmanImages();
 
       document.addEventListener("keydown", this.#keydown)
+    }
+
+    draw (ctx) {
+      this.#move()
+
+      ctx.drawImage(this.reactmanImages[this.reactmanImageIndex], this.x, this.y, this.tileSize, this.tileSize)
+    }
+
+    #loadReactmanImages() {
+      const reactmanImage1 = new Image();
+      reactmanImage1.src = pac0
+
+      const reactmanImage2 = new Image();
+      reactmanImage2.src = pac1
+
+      const reactmanImage3 = new Image();
+      reactmanImage3.src = pac2
+
+      const reactmanImage4 = new Image();
+      reactmanImage3.src = pac1
+
+      this.reactmanImages = [reactmanImage1, reactmanImage2, reactmanImage3, reactmanImage4]
+
+      this.reactmanImageIndex = 0
     }
 
     #keydown = (e) => {
       // left
       if (e.keyCode == 37) {
-        if (this.currentDirection == MovingDirection.right)
-          this.currentDirection == MovingDirection.left;
-        this.requestedDirection == MovingDirection.left;
+        if (this.currentMovingDirection == MovingDirection.right)
+          this.currentMovingDirection = MovingDirection.left;
+        this.requestedMovingDirection = MovingDirection.left;
       }
 
       // up
       if (e.keyCode == 38) {
-        console.log("AAA")
-        if (this.currentDirection == MovingDirection.down)
-          this.currentDirection == MovingDirection.up;
-        this.requestedDirection == MovingDirection.up;
+        if (this.currentMovingDirection == MovingDirection.down)
+          this.currentMovingDirection = MovingDirection.up;
+        this.requestedMovingDirection = MovingDirection.up;
       }
 
       // right
       if (e.keyCode == 39) {
-        if (this.currentDirection == MovingDirection.left)
-          this.currentDirection == MovingDirection.right;
-        this.requestedDirection == MovingDirection.right;
+        if (this.currentMovingDirection == MovingDirection.left)
+          this.currentMovingDirection = MovingDirection.right;
+        this.requestedMovingDirection = MovingDirection.right;
       }
 
       // down
       if (e.keyCode == 40) {
-        if (this.currentDirection == MovingDirection.up)
-          this.currentDirection == MovingDirection.down;
-        this.requestedDirection == MovingDirection.down;
+        if (this.currentMovingDirection == MovingDirection.up)
+          this.currentMovingDirection = MovingDirection.down;
+        this.requestedMovingDirection = MovingDirection.down;
       }
     }
 
-    #move() {
-      if (this.currentDirection !== this.requestedDirection) {
-        if (Number.isInteger(this.x/20) && Number.isInteger(this.y/20)) {
-          this.currentDirection = this.requestedDirection
+    #move () {
+      if (this.currentMovingDirection !== this.requestedMovingDirection) {
+        if (
+          Number.isInteger(this.x / this.tileSize) &&
+          Number.isInteger(this.y / this.tileSize)
+        ) {
+            if (!this.tileMap.didCollideWithEnvironment(this.x, this.y, this.requestedMovingDirection))
+          this.currentMovingDirection = this.requestedMovingDirection;
         }
       }
 
-      switch(this.currentDirection) {
+      if (this.tileMap.didCollideWithEnvironment(this.x, this.y, this.currentMovingDirection)) {
+        return
+      }
+
+      switch (this.currentMovingDirection) {
         case MovingDirection.up:
-          this.y -= this.speed;
-          break; 
+          this.y -= this.velocity;
+          break;
         case MovingDirection.down:
-          this.y += this.speed;
+          this.y += this.velocity;
+          break;
+        case MovingDirection.left:
+          this.x -= this.velocity;
+          break;
+        case MovingDirection.right:
+          this.x += this.velocity;
           break;
       }
     }
