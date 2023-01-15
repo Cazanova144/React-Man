@@ -60,12 +60,15 @@ export default class TileMap {
                 // draw pellet
                 if (tile === 0) {
                     this.#drawPellet(ctx, column, row, this.tileSize)
+                } else {
+                    this.#drawBlank(ctx, column, row, this.tileSize)
                 }
 
                 // draw wall
                 if (tile === 1) {
                     this.#drawWall(ctx, column, row, this.tileSize)
-                }
+                } 
+    
 
                 // Uncomment to see border between tiles
 
@@ -82,6 +85,11 @@ export default class TileMap {
 
     #drawWall(ctx, column, row, size) {
         ctx.drawImage(this.wall, column * this.tileSize, row * this.tileSize, size, size)
+    }
+
+    #drawBlank(ctx, column, row, size) {
+        ctx.fillStyle = 'black'
+        ctx.fillRect(column * this.tileSize, row * this.tileSize, size, size)
     }
 
     getReactman(velocity) {
@@ -145,5 +153,16 @@ export default class TileMap {
           }
         }
         return false;
+    }
+
+    eatPellet(x, y) {
+        const row = y / this.tileSize
+        const column = x / this.tileSize
+
+        if (Number.isInteger(row) && Number.isInteger(column)) {
+            if (this.layout[row][column] === 0) {
+                this.layout[row][column] = 5
+            }
+        }
     }
 }

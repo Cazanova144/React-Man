@@ -27,6 +27,7 @@ export default class Reactman {
   draw (ctx) {
     this.#move()
     this.#animate()
+    this.#eatPellet()
 
     const size = this.tileSize / 2
 
@@ -144,6 +145,12 @@ export default class Reactman {
       this.reactmanImageIndex++
 
       if (this.reactmanImageIndex == this.reactmanImages.length) this.reactmanImageIndex = 0
+    }
+  }
+
+  #eatPellet () {
+    if (this.tileMap.eatPellet(this.x, this.y)) {
+      
     }
   }
 }
