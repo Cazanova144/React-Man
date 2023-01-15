@@ -1,7 +1,8 @@
+import MovingDirection from './MovingDirection.js';
 import pac0 from '../assets/images/pac0.png'
 import pac1 from '../assets/images/pac1.png'
 import pac2 from '../assets/images/pac2.png'
-import MovingDirection from './MovingDirection.js';
+import waka from '../assets/sounds/waka.wav'
 
 export default class Reactman {
   constructor(x, y, tileSize, velocity, tileMap) {
@@ -20,6 +21,7 @@ export default class Reactman {
     this.#loadReactmanImages();
 
     this.reactmanRotation = this.Rotation.right
+    this.wakaSound = new Audio(waka)
 
     document.addEventListener("keydown", this.#keydown)
   }
@@ -150,7 +152,9 @@ export default class Reactman {
 
   #eatPellet () {
     if (this.tileMap.eatPellet(this.x, this.y)) {
-      
+
+      // play sound
+      this.wakaSound.play()
     }
   }
 }

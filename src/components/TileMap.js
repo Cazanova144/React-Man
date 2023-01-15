@@ -14,7 +14,7 @@ export default class TileMap {
         this.wall.src = wall
     }
 
-    //0 - dots
+    //0 - pellets
     //1 - wall
     //4 - pacman
     //5 - empty space
@@ -99,7 +99,7 @@ export default class TileMap {
 
                 // if tile is react-man
                 if (tile === 4) {
-                    this.layout[row][column] = 0;
+                    // this.layout[row][column] = 0;
                     return new Reactman(column * this.tileSize, row * this.tileSize, this.tileSize, velocity, this)
                 }
             }
@@ -162,7 +162,9 @@ export default class TileMap {
         if (Number.isInteger(row) && Number.isInteger(column)) {
             if (this.layout[row][column] === 0) {
                 this.layout[row][column] = 5
+                return true
             }
         }
+        return false
     }
 }
