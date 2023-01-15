@@ -98,11 +98,13 @@ const Game = () => {
     const ctx = canvas.getContext('2d')
     const tileMap = new TileMap(tileSize)
     const reactman = tileMap.getReactman(velocity)
+    const ghosts = tileMap.getGhosts(velocity)
 
     const gameLoop = () => {
       // console.log("gameloop")
       tileMap.draw(ctx);
       reactman.draw(ctx)
+      ghosts.forEach(ghost => ghost.draw(ctx))
     }
 
     tileMap.setCanvasSize(canvas)

@@ -154,7 +154,7 @@ export default class Reactman {
     if (this.tileMap.eatPellet(this.x, this.y)) {
 
       // play sound
-      this.wakaSound.play()
+      // this.wakaSound.play()
     }
   }
 }

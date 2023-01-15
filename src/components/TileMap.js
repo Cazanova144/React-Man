@@ -1,6 +1,7 @@
 import pellet from '../assets/images/yellowDot.png'
 import wall from '../assets/images/wall.png'
 import Reactman from './Reactman'
+import Ghost from './Ghost'
 import MovingDirection from './MovingDirection.js';
 
 export default class TileMap {
@@ -34,9 +35,9 @@ export default class TileMap {
         [1,1,1,1,1,1,0,1,1,1,1,1,0,1,1,0,1,1,1,1,1,0,1,1,1,1,1,1],
         [1,1,1,1,1,1,0,1,1,5,5,5,5,5,5,5,5,5,5,1,1,0,1,1,1,1,1,1],
         [1,1,1,1,1,1,0,1,1,5,1,1,1,2,2,1,1,1,5,1,1,0,1,1,1,1,1,1],
-        [1,1,1,1,1,1,0,1,1,5,1,2,2,2,2,2,2,1,5,1,1,0,1,1,1,1,1,1],
+        [1,1,1,1,1,1,0,1,1,5,1,6,2,2,2,2,6,1,5,1,1,0,1,1,1,1,1,1],
         [5,5,5,5,5,5,0,0,0,5,1,2,2,2,2,2,2,1,5,0,0,0,5,5,5,5,5,5],
-        [1,1,1,1,1,1,0,1,1,5,1,2,2,2,2,2,2,1,5,1,1,0,1,1,1,1,1,1],
+        [1,1,1,1,1,1,0,1,1,5,1,6,2,2,2,2,6,1,5,1,1,0,1,1,1,1,1,1],
         [1,1,1,1,1,1,0,1,1,5,1,1,1,1,1,1,1,1,5,1,1,0,1,1,1,1,1,1],
         [1,1,1,1,1,1,0,1,1,5,1,1,1,1,1,1,1,1,5,1,1,0,1,1,1,1,1,1],
         [1,0,0,0,0,0,0,0,0,5,5,5,5,5,4,5,5,5,5,0,0,0,0,0,0,0,0,1],
@@ -104,6 +105,24 @@ export default class TileMap {
                 }
             }
         }
+    }
+
+    getGhosts(velocity) {
+        const ghosts = []
+
+        for (let row = 0; row < this.layout.length; row++) {
+            for (let column = 0; column < this.layout[row].length; column++) {
+                const tile = this.layout[row][column]
+
+                if (tile == 6) {
+                    this.layout[row][column] = 0
+
+                    ghosts.push(new Ghost(column * this.tileSize, row * this.tileSize, this.tileSize, velocity, this))
+                }
+            }
+        }
+
+        return ghosts
     }
 
     setCanvasSize(canvas) {
