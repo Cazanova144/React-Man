@@ -22,15 +22,56 @@ export default class Ghost {
 
         this.directionTimerDefault = this.#random(10, 50)
         this.directionTimer = this.directionTimerDefault
+
+        this.scaredAboutToExpireTimerDefault = 10
+        this.scaredAboutToExpireTimer = this.scaredAboutToExpireTimerDefault
     }
 
-    draw(ctx, pause) {
+    draw(ctx, pause, reactman) {
         if (!pause) {
             this.#move()
             this.#changeDirection()
         }
 
+        this.#setImage(ctx, reactman)
+    }
+
+    collideWith(reactman) {
+        const size = this.tileSize / 2
+
+        if (this.x < reactman.x + size && this.x + size > reactman.x && this.y < reactman.y + size && this.y + size > reactman.y) {
+            return true
+        } else {
+            return false
+        }
+    }
+
+    #setImage(ctx, reactman) {
+        if (reactman.powerPelletActive) {
+            this.#setImageWhenPowerPelletIsActive(reactman)
+        } else {
+            this.image = this.normalGhost
+        }
+
         ctx.drawImage(this.image, this.x, this.y, this.tileSize, this.tileSize)
+    }
+
+    #setImageWhenPowerPelletIsActive(reactman) {
+        if (reactman.powerPelletAboutToExpire) {
+            this.scaredAboutToExpireTimer--
+
+            if (this.scaredAboutToExpireTimer == 0) {
+                this.scaredAboutToExpireTimer = this.scaredAboutToExpireTimerDefault
+
+                if (this.image == this.scaredGhost) {
+                    this.image = this.scaredGhost2
+                } else {
+                    this.image = this.scaredGhost
+                }
+            }
+        } else {
+            this.image = this.scaredGhost
+        }
     }
 
     #changeDirection() {

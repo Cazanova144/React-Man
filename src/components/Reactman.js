@@ -4,6 +4,7 @@ import pac1 from '../assets/images/pac1.png'
 import pac2 from '../assets/images/pac2.png'
 import waka from '../assets/sounds/waka.wav'
 import power_dot from '../assets/sounds/power_dot.wav'
+import eat_ghost from '../assets/sounds/eat_ghost.wav'
 
 export default class Reactman {
   constructor(x, y, tileSize, velocity, tileMap) {
@@ -25,17 +26,26 @@ export default class Reactman {
     this.wakaSound = new Audio(waka)
 
     this.powerPelletSound = new Audio(power_dot)
+    this.powerPelletActive = false
+    this.powerPelletAboutToExpire = false
+    this.timers = []
+
+    this.eatGhostSound = new Audio(eat_ghost)
 
     this.madeFirstMove = false
 
     document.addEventListener("keydown", this.#keydown)
   }
 
-  draw (ctx) {
-    this.#move()
-    this.#animate()
+  draw (ctx, pause, ghosts) {
+    if (!pause) {
+      this.#move()
+      this.#animate()
+    }
+
     this.#eatPellet()
     this.#eatPowerPellet()
+    this.#eatGhost(ghosts)
 
     const size = this.tileSize / 2
 
@@ -109,6 +119,13 @@ export default class Reactman {
   }
 
   #move () {
+
+    // if statement I will use later for going to the other side
+
+    // if (!this.x) {
+    //   console.log("Gotcha")
+    // }
+
     if (this.currentMovingDirection !== this.requestedMovingDirection) {
       if (
         Number.isInteger(this.x / this.tileSize) &&
@@ -171,7 +188,38 @@ export default class Reactman {
   #eatPowerPellet() {
     if (this.tileMap.eatPowerPellet(this.x, this.y)) {
 
-      this.powerPelletSound.play()
+      // this.powerPelletSound.play()
+
+      this.powerPelletActive = true
+      this.powerPelletAboutToExpire = false
+      this.timers.forEach((timer) => clearTimeout(timer))
+      this.timers = []
+
+      let powerPelletTimer = setTimeout(() => {
+        this.powerPelletActive = false
+        this.powerPelletAboutToExpire = false
+      }, 6 * 1000)
+
+      this.timers.push(powerPelletTimer)
+
+      let powerPelletAboutToExpireTimer = setTimeout(() => {
+        this.powerPelletAboutToExpire = true
+      }, 3 * 1000)
+
+      this.timers.push(powerPelletAboutToExpireTimer)
+
+    }
+  }
+
+  #eatGhost(ghosts) {
+    if (this.powerPelletActive) {
+      const collideGhosts = ghosts.filter((ghost) => ghost.collideWith(this))
+
+      collideGhosts.forEach((ghost) => {
+        ghosts.splice(ghosts.indexOf(ghost), 1)
+        
+        this.eatGhostSound.play()
+      })
     }
   }
 }

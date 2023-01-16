@@ -1,5 +1,7 @@
 import { React, useEffect, useState } from 'react'
 import TileMap from '../components/TileMap'
+import gameOverWav from '../assets/sounds/gameOver.wav'
+import gameWinWav from '../assets/sounds/gameWin.wav'
 
 const Game = () => {
 
@@ -25,43 +27,6 @@ const Game = () => {
   //     scoreDisplay.innerHTML = score
   //   }
   // }
-
-  const layout = [
-    1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
-    1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1,
-    1,0,1,1,1,1,0,1,1,1,1,1,0,1,1,0,1,1,1,1,1,0,1,1,1,1,0,1,
-    1,3,1,1,1,1,0,1,1,1,1,1,0,1,1,0,1,1,1,1,1,0,1,1,1,1,3,1,
-    1,0,1,1,1,1,0,1,1,1,1,1,0,1,1,0,1,1,1,1,1,0,1,1,1,1,0,1,
-    1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
-    1,0,1,1,1,1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,1,1,1,1,0,1,
-    1,0,1,1,1,1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,1,1,1,1,0,1,
-    1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1,
-    1,1,1,1,1,1,0,1,1,1,1,1,0,1,1,0,1,1,1,1,1,0,1,1,1,1,1,1,
-    1,1,1,1,1,1,0,1,1,4,4,4,4,4,4,4,4,4,4,1,1,0,1,1,1,1,1,1,
-    1,1,1,1,1,1,0,1,1,4,1,1,1,2,2,1,1,1,4,1,1,0,1,1,1,1,1,1,
-    1,1,1,1,1,1,0,1,1,4,1,2,2,2,2,2,2,1,4,1,1,0,1,1,1,1,1,1,
-    4,4,4,4,4,4,0,0,0,4,1,2,2,2,2,2,2,1,4,0,0,0,4,4,4,4,4,4,
-    1,1,1,1,1,1,0,1,1,4,1,2,2,2,2,2,2,1,4,1,1,0,1,1,1,1,1,1,
-    1,1,1,1,1,1,0,1,1,4,1,1,1,1,1,1,1,1,4,1,1,0,1,1,1,1,1,1,
-    1,1,1,1,1,1,0,1,1,4,1,1,1,1,1,1,1,1,4,1,1,0,1,1,1,1,1,1,
-    1,0,0,0,0,0,0,0,0,4,4,4,4,4,4,4,4,4,4,0,0,0,0,0,0,0,0,1,
-    1,0,1,1,1,1,0,1,1,1,1,1,0,1,1,0,1,1,1,1,1,0,1,1,1,1,0,1,
-    1,0,1,1,1,1,0,1,1,1,1,1,0,1,1,0,1,1,1,1,1,0,1,1,1,1,0,1,
-    1,3,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,3,1,
-    1,1,1,0,1,1,0,1,1,0,1,1,1,1,1,1,1,1,0,1,1,0,1,1,0,1,1,1,
-    1,1,1,0,1,1,0,1,1,0,1,1,1,1,1,1,1,1,0,1,1,0,1,1,0,1,1,1,
-    1,0,0,0,0,0,0,1,1,0,0,0,0,1,1,0,0,0,0,1,1,0,0,0,0,0,0,1,
-    1,0,1,1,1,1,1,1,1,1,1,1,0,1,1,0,1,1,1,1,1,1,1,1,1,1,0,1,
-    1,0,1,1,1,1,1,1,1,1,1,1,0,1,1,0,1,1,1,1,1,1,1,1,1,1,0,1,
-    1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
-    1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
-  ]
-
-  // 0 - pellet
-  // 1 - wall
-  // 2 - ghost-spawn
-  // 3 - power-pellet
-  // 4 - empty
 
   const squares = []
 
@@ -100,15 +65,37 @@ const Game = () => {
     const reactman = tileMap.getReactman(velocity)
     const ghosts = tileMap.getGhosts(velocity)
 
+    let gameOver = false
+    let gameWin = false
+
+    const gameOverSound = new Audio(gameOverWav)
+    const gameWinSound = new Audio(gameWinWav)
+
     const gameLoop = () => {
       // console.log("gameloop")
       tileMap.draw(ctx);
-      reactman.draw(ctx)
-      ghosts.forEach(ghost => ghost.draw(ctx, pause()))
+      reactman.draw(ctx, pause(), ghosts)
+      ghosts.forEach(ghost => ghost.draw(ctx, pause(), reactman))
+
+      checkGameOver()
+    }
+
+    const checkGameOver = () => {
+      if (!gameOver) {
+        gameOver = isGameOver()
+
+        if (gameOver) {
+          gameOverSound.play()
+        }
+      }
+    }
+
+    const isGameOver = () => {
+      return ghosts.some(ghost => !reactman.powerPelletActive && ghost.collideWith(reactman))
     }
 
     const pause = () => {
-      return !reactman.madeFirstMove
+      return !reactman.madeFirstMove || gameOver
     }
 
     tileMap.setCanvasSize(canvas)
