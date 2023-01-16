@@ -104,7 +104,11 @@ const Game = () => {
       // console.log("gameloop")
       tileMap.draw(ctx);
       reactman.draw(ctx)
-      ghosts.forEach(ghost => ghost.draw(ctx))
+      ghosts.forEach(ghost => ghost.draw(ctx, pause()))
+    }
+
+    const pause = () => {
+      return !reactman.madeFirstMove
     }
 
     tileMap.setCanvasSize(canvas)

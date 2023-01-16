@@ -23,6 +23,8 @@ export default class Reactman {
     this.reactmanRotation = this.Rotation.right
     this.wakaSound = new Audio(waka)
 
+    this.madeFirstMove = false
+
     document.addEventListener("keydown", this.#keydown)
   }
 
@@ -74,6 +76,7 @@ export default class Reactman {
       if (this.currentMovingDirection == MovingDirection.right)
         this.currentMovingDirection = MovingDirection.left;
       this.requestedMovingDirection = MovingDirection.left;
+      this.madeFirstMove = true
     }
 
     // up
@@ -81,6 +84,7 @@ export default class Reactman {
       if (this.currentMovingDirection == MovingDirection.down)
         this.currentMovingDirection = MovingDirection.up;
       this.requestedMovingDirection = MovingDirection.up;
+      this.madeFirstMove = true
     }
 
     // right
@@ -88,6 +92,7 @@ export default class Reactman {
       if (this.currentMovingDirection == MovingDirection.left)
         this.currentMovingDirection = MovingDirection.right;
       this.requestedMovingDirection = MovingDirection.right;
+      this.madeFirstMove = true
     }
 
     // down
@@ -95,6 +100,7 @@ export default class Reactman {
       if (this.currentMovingDirection == MovingDirection.up)
         this.currentMovingDirection = MovingDirection.down;
       this.requestedMovingDirection = MovingDirection.down;
+      this.madeFirstMove = true
     }
   }
 
