@@ -1,8 +1,9 @@
-import pellet from '../assets/images/yellowDot.png'
-import wall from '../assets/images/wall.png'
 import Reactman from './Reactman'
 import Ghost from './Ghost'
 import MovingDirection from './MovingDirection.js';
+import pellet from '../assets/images/yellowDot.png'
+import powerPellet from '../assets/images/pinkDot.png'
+import wall from '../assets/images/wall.png'
 
 export default class TileMap {
     constructor (tileSize) {
@@ -11,8 +12,17 @@ export default class TileMap {
         this.pellet = new Image()
         this.pellet.src = pellet
 
+        this.powerPellet = new Image()
+        this.powerPellet.src = powerPellet
+
+        // this.pellet = this.powerPellet
+
         this.wall = new Image()
         this.wall.src = wall
+
+        this.powerDot = this.powerPellet
+        this.powerPelletAnimationTimerDefault = 30
+        this.powerPelletAnimationTimer = this.powerPelletAnimationTimerDefault
     }
 
     //0 - pellets
@@ -69,6 +79,11 @@ export default class TileMap {
                 if (tile === 1) {
                     this.#drawWall(ctx, column, row, this.tileSize)
                 } 
+
+                // draw power-pellet
+                if (tile === 7) {
+                    this.#drawPowerPellet(ctx, column, row, this.tileSize)
+                }
     
 
                 // Uncomment to see border between tiles
@@ -82,6 +97,28 @@ export default class TileMap {
 
     #drawPellet(ctx, column, row, size) {
         ctx.drawImage(this.pellet, column * this.tileSize, row * this.tileSize, size, size)
+    }
+
+    #drawPowerPellet(ctx, column, row, size) {
+        this.powerPelletAnimationTimer--
+        // console.log("this.powerPelletAnimationTimer ==>", this.powerPelletAnimationTimer)
+
+        if (this.powerPelletAnimationTimer === 0) {
+            this.powerPelletAnimationTimer = this.powerPelletAnimationTimerDefault
+
+            if (this.powerDot == this.powerPellet) {
+                // console.log("powerDot ==>", this.powerDot)
+                this.powerDot = this.pellet
+                // console.log("this.powerDot ==>", this.powerDot)
+            } else {
+                // console.log("powerDot ==>", this.powerDot)
+                this.powerDot = this.powerPellet
+            }
+        }
+
+        // console.log("this.powerDot ==>", this.powerDot)
+        
+        ctx.drawImage(this.powerDot, column * size, row * size, size, size)
     }
 
     #drawWall(ctx, column, row, size) {
