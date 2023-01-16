@@ -74,6 +74,9 @@ const Game = () => {
     const gameLoop = () => {
       // console.log("gameloop")
       tileMap.draw(ctx);
+
+      drawGameEnd()
+
       reactman.draw(ctx, pause(), ghosts)
       ghosts.forEach(ghost => ghost.draw(ctx, pause(), reactman))
 
@@ -107,6 +110,24 @@ const Game = () => {
 
     const pause = () => {
       return !reactman.madeFirstMove || gameOver || gameWin
+    }
+
+    const drawGameEnd = () => {
+      if (gameOver || gameWin) {
+        let text = "you win"
+
+        if (gameOver) {
+          text = "game over"
+          setLost(true)
+        }
+
+        if (gameWin) {
+          setWon(true)
+        }
+
+        ctx.fillStyle = "black"
+        ctx.fillRect(0, canvas.height/3.2, canvas.width, 80)
+      }
     }
 
     tileMap.setCanvasSize(canvas)
