@@ -213,6 +213,14 @@ export default class TileMap {
         return false;
     }
 
+    didWin() {
+        return this.#pelletsLeft === 0
+    }
+
+    #pelletsLeft() {
+        return this.layout.flat().filter(tile => tile === 0).length
+    }
+
     eatPellet(x, y) {
         const row = y / this.tileSize
         const column = x / this.tileSize

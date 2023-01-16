@@ -78,6 +78,17 @@ const Game = () => {
       ghosts.forEach(ghost => ghost.draw(ctx, pause(), reactman))
 
       checkGameOver()
+      checkGameWin()
+    }
+
+    const checkGameWin = () => {
+      if (!gameWin) {
+        gameWin = tileMap.didCollideWithEnvironment()
+
+        if (gameWin) {
+          gameWinSound.play()
+        }
+      }
     }
 
     const checkGameOver = () => {
@@ -95,7 +106,7 @@ const Game = () => {
     }
 
     const pause = () => {
-      return !reactman.madeFirstMove || gameOver
+      return !reactman.madeFirstMove || gameOver || gameWin
     }
 
     tileMap.setCanvasSize(canvas)
