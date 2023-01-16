@@ -19,7 +19,7 @@ export default class TileMap {
     //1 - wall
     //4 - pacman
     //5 - empty space
-    //6 - enemy
+    //6 - ghost
     //7 - power-pellet
 
     layout = [
@@ -34,10 +34,10 @@ export default class TileMap {
         [1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1],
         [1,1,1,1,1,1,0,1,1,1,1,1,0,1,1,0,1,1,1,1,1,0,1,1,1,1,1,1],
         [1,1,1,1,1,1,0,1,1,5,5,5,5,5,5,5,5,5,5,1,1,0,1,1,1,1,1,1],
-        [1,1,1,1,1,1,0,1,1,5,1,1,1,2,2,1,1,1,5,1,1,0,1,1,1,1,1,1],
-        [1,1,1,1,1,1,0,1,1,5,1,6,2,2,2,2,6,1,5,1,1,0,1,1,1,1,1,1],
-        [5,5,5,5,5,5,0,0,0,5,1,2,2,2,2,2,2,1,5,0,0,0,5,5,5,5,5,5],
-        [1,1,1,1,1,1,0,1,1,5,1,6,2,2,2,2,6,1,5,1,1,0,1,1,1,1,1,1],
+        [1,1,1,1,1,1,0,1,1,5,1,1,1,5,5,1,1,1,5,1,1,0,1,1,1,1,1,1],
+        [1,1,1,1,1,1,0,1,1,5,1,6,5,5,5,5,6,1,5,1,1,0,1,1,1,1,1,1],
+        [5,5,5,5,5,5,0,0,0,5,1,5,5,5,5,5,5,1,5,0,0,0,5,5,5,5,5,5],
+        [1,1,1,1,1,1,0,1,1,5,1,6,5,5,5,5,6,1,5,1,1,0,1,1,1,1,1,1],
         [1,1,1,1,1,1,0,1,1,5,1,1,1,1,1,1,1,1,5,1,1,0,1,1,1,1,1,1],
         [1,1,1,1,1,1,0,1,1,5,1,1,1,1,1,1,1,1,5,1,1,0,1,1,1,1,1,1],
         [1,0,0,0,0,0,0,0,0,5,5,5,5,5,4,5,5,5,5,0,0,0,0,0,0,0,0,1],
@@ -109,6 +109,7 @@ export default class TileMap {
 
     getGhosts(velocity) {
         const ghosts = []
+        let index = 0
 
         for (let row = 0; row < this.layout.length; row++) {
             for (let column = 0; column < this.layout[row].length; column++) {
@@ -116,8 +117,9 @@ export default class TileMap {
 
                 if (tile == 6) {
                     this.layout[row][column] = 0
-
-                    ghosts.push(new Ghost(column * this.tileSize, row * this.tileSize, this.tileSize, velocity, this))
+                    
+                    ghosts.push(new Ghost(column * this.tileSize, row * this.tileSize, this.tileSize, velocity, this, index))
+                    index++
                 }
             }
         }
