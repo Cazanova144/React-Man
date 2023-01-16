@@ -3,6 +3,7 @@ import pac0 from '../assets/images/pac0.png'
 import pac1 from '../assets/images/pac1.png'
 import pac2 from '../assets/images/pac2.png'
 import waka from '../assets/sounds/waka.wav'
+import power_dot from '../assets/sounds/power_dot.wav'
 
 export default class Reactman {
   constructor(x, y, tileSize, velocity, tileMap) {
@@ -23,6 +24,8 @@ export default class Reactman {
     this.reactmanRotation = this.Rotation.right
     this.wakaSound = new Audio(waka)
 
+    this.powerPelletSound = new Audio(power_dot)
+
     this.madeFirstMove = false
 
     document.addEventListener("keydown", this.#keydown)
@@ -32,6 +35,7 @@ export default class Reactman {
     this.#move()
     this.#animate()
     this.#eatPellet()
+    this.#eatPowerPellet()
 
     const size = this.tileSize / 2
 
@@ -161,6 +165,13 @@ export default class Reactman {
 
       // play sound
       // this.wakaSound.play()
+    }
+  }
+
+  #eatPowerPellet() {
+    if (this.tileMap.eatPowerPellet(this.x, this.y)) {
+
+      this.powerPelletSound.play()
     }
   }
 }
