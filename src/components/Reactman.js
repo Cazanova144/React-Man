@@ -30,6 +30,8 @@ export default class Reactman {
     this.powerPelletAboutToExpire = false
     this.timers = []
 
+    this.score = 0
+
     this.eatGhostSound = new Audio(eat_ghost)
 
     this.madeFirstMove = false
@@ -180,13 +182,20 @@ export default class Reactman {
   #eatPellet () {
     if (this.tileMap.eatPellet(this.x, this.y)) {
 
+      // add score
+      this.score += 10
+
       // play sound
       // this.wakaSound.play()
+
     }
   }
 
   #eatPowerPellet() {
+    
     if (this.tileMap.eatPowerPellet(this.x, this.y)) {
+
+      
 
       // this.powerPelletSound.play()
 
@@ -208,16 +217,23 @@ export default class Reactman {
 
       this.timers.push(powerPelletAboutToExpireTimer)
 
+      // add score
+      this.score += 50
     }
   }
 
   #eatGhost(ghosts) {
     if (this.powerPelletActive) {
+      // add score
+      // this.score += 100
+
       const collideGhosts = ghosts.filter((ghost) => ghost.collideWith(this))
 
       collideGhosts.forEach((ghost) => {
         ghosts.splice(ghosts.indexOf(ghost), 1)
-        
+
+        this.score += 100
+
         this.eatGhostSound.play()
       })
     }

@@ -14,10 +14,10 @@ const Game = () => {
   let reactmanCurrentIndex = 490
   // const [reactmanCurrentIndex, setReactmanCurrentIndex] = useState(490)
   // const [finalScore, setFinalScore] = useState(0)
-  let score = 0
+  // let score = 0
   const [lost, setLost] = useState(false)
   const [won, setWon] = useState(false)
-  const [paused, setPaused] = useState(false)
+  const [score, setScore] = useState(0)
 
   let gamePaused = false
 
@@ -68,6 +68,8 @@ const Game = () => {
     const reactman = tileMap.getReactman(velocity)
     const ghosts = tileMap.getGhosts(velocity)
 
+    // console.log("tileMap.layout ==>", tileMap.layout)
+
     let gameOver = false
     let gameWin = false
 
@@ -83,6 +85,9 @@ const Game = () => {
       reactman.draw(ctx, pause(), ghosts)
       ghosts.forEach(ghost => ghost.draw(ctx, pause(), reactman))
 
+      // console.log("reactman.score ==>", reactman.score)
+      setScore(reactman.score)
+
       checkGameOver()
       checkGameWin()
     }
@@ -92,6 +97,7 @@ const Game = () => {
         gameWin = tileMap.didCollideWithEnvironment()
 
         if (gameWin) {
+          setFina
           gameWinSound.play()
         }
       }
@@ -139,18 +145,11 @@ const Game = () => {
     tileMap.setCanvasSize(canvas)
     setInterval(gameLoop, 1000 / 75)
 
-    // generateBoard()
-
-    // squares[reactmanCurrentIndex].classList.add('react-man')
-
-    // ghosts.forEach(ghost => {
-    //   squares[ghost.currentIndex].classList.add(ghost.className)
-    //   squares[ghost.currentIndex].classList.add('ghost')
-    // })
-
-    // ghosts.forEach(ghost => moveGhost(ghost))
-
   }, [])
+
+  // useEffect(() => {
+  //   console.log("current score ==>", score)
+  // }, [score])
 
   // class for ghosts 
   // class Ghost {
@@ -382,19 +381,19 @@ const Game = () => {
 
           <canvas id="grid" className="bg-white w-[35rem] h-[35rem] mx-auto my-auto flex flex-wrap " />
 
-          <h3>Score: <span id="score"></span></h3>
+          <h3>Score: {score}</h3>
         </div> 
       : lost ?
         <div>
           <h1>Game Over!</h1>
 
-          <h2>Final score: {finalScore}</h2>
+          <h2>Final score: {score}</h2>
         </div>
       : won ?
         <div>
           <h1>You Beat The Level!</h1>
 
-          <h2>Final Score: {finalScore}</h2>
+          <h2>Final Score: {score}</h2>
         </div>
       : ""}
     </div>

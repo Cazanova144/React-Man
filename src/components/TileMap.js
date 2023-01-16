@@ -146,6 +146,8 @@ export default class TileMap {
 
     getGhosts(velocity) {
         const ghosts = []
+
+        // Will use index later for making different ghosts
         let index = 0
 
         for (let row = 0; row < this.layout.length; row++) {
