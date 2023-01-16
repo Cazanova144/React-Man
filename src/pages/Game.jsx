@@ -13,10 +13,13 @@ const Game = () => {
   const width = 28
   let reactmanCurrentIndex = 490
   // const [reactmanCurrentIndex, setReactmanCurrentIndex] = useState(490)
-  const [finalScore, setFinalScore] = useState(0)
+  // const [finalScore, setFinalScore] = useState(0)
   let score = 0
   const [lost, setLost] = useState(false)
   const [won, setWon] = useState(false)
+  const [paused, setPaused] = useState(false)
+
+  let gamePaused = false
 
   // scoreDisplay.innerText = score
 
@@ -109,7 +112,10 @@ const Game = () => {
     }
 
     const pause = () => {
-      return !reactman.madeFirstMove || gameOver || gameWin
+      // console.log("paused ==>", paused)
+      // if (paused) return true
+
+      return !reactman.madeFirstMove || gameOver || gameWin || gamePaused
     }
 
     const drawGameEnd = () => {
@@ -358,6 +364,12 @@ const Game = () => {
 
   // onKeyDown={moveReactman}
 
+  // onKeyDown={setPaused(!paused)}
+
+  // useEffect(() => {
+  //   console.log("eureka! ", paused)
+  // }, [paused])
+
   return (
     <div tabIndex={0} >
       <h1 className="mb-5">Game</h1>
@@ -366,6 +378,8 @@ const Game = () => {
 
       {!lost && !won ? 
         <div>
+          <div onClick={() => {gamePaused = !gamePaused}} >Pause button</div>
+
           <canvas id="grid" className="bg-white w-[35rem] h-[35rem] mx-auto my-auto flex flex-wrap " />
 
           <h3>Score: <span id="score"></span></h3>
