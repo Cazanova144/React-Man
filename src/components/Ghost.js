@@ -110,6 +110,16 @@ export default class Ghost {
                     break;
             }
         }
+
+        // if statements for making Ghosts able to go out one side and in the other
+
+        if (!this.x && this.currentMovingDirection == MovingDirection.left) {
+            this.x = 900
+        }
+    
+        if (this.x == 900 && this.currentMovingDirection == MovingDirection.right) {
+            this.x = 0
+        }
     }
 
     #random(min, max) {

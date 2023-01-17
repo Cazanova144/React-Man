@@ -124,9 +124,9 @@ export default class Reactman {
 
     // if statement I will use later for going to the other side
 
-    // if (!this.x) {
-    //   console.log("Gotcha")
-    // }
+    // console.log("this.x ==>", this.x)
+
+    
 
     if (this.currentMovingDirection !== this.requestedMovingDirection) {
       if (
@@ -163,6 +163,16 @@ export default class Reactman {
         this.reactmanRotation = this.Rotation.right;
         this.x += this.velocity;
         break;
+    }
+
+    // if statements for making React-Man able to go out one side and in the other
+
+    if (!this.x && this.currentMovingDirection == MovingDirection.left) {
+      this.x = 900
+    }
+
+    if (this.x == 900 && this.currentMovingDirection == MovingDirection.right) {
+      this.x = 0
     }
   }
 
