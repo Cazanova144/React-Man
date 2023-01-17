@@ -1,5 +1,9 @@
 import MovingDirection from './MovingDirection'
 import ghost from '../assets/images/ghost.png'
+import blinky from '../assets/images/blinky.png'
+import inky from '../assets/images/inky.png'
+import pinky from '../assets/images/pinky.png'
+import clyde from '../assets/images/clyde.png'
 import scaredGhost from '../assets/images/scaredGhost.png'
 import scaredGhost2 from '../assets/images/scaredGhost2.png'
 
@@ -50,7 +54,13 @@ export default class Ghost {
         if (reactman.powerPelletActive) {
             this.#setImageWhenPowerPelletIsActive(reactman)
         } else {
-            this.image = this.normalGhost
+
+            if (this.index == 0) this.image = this.pinky
+            if (this.index == 1) this.image = this.blinky
+            if (this.index == 2) this.image = this.clyde
+            if (this.index == 3) this.image = this.inky
+            
+            // this.image = this.normalGhost
         }
 
         ctx.drawImage(this.image, this.x, this.y, this.tileSize, this.tileSize)
@@ -128,6 +138,17 @@ export default class Ghost {
 
     #loadImages() {
         // Use index here to switch between images
+        this.blinky = new Image()
+        this.blinky.src = blinky
+
+        this.inky = new Image()
+        this.inky.src = inky
+
+        this.pinky = new Image()
+        this.pinky.src = pinky
+
+        this.clyde = new Image()
+        this.clyde.src = clyde
 
         this.normalGhost = new Image();
         this.normalGhost.src = ghost
@@ -138,6 +159,11 @@ export default class Ghost {
         this.scaredGhost2 = new Image()
         this.scaredGhost2.src = scaredGhost2
 
-        this.image = this.normalGhost
+        // this.image = this.normalGhost
+
+        if (this.index == 0) this.image = this.pinky
+        if (this.index == 1) this.image = this.blinky
+        if (this.index == 2) this.image = this.clyde
+        if (this.index == 3) this.image = this.inky
     }
 }
