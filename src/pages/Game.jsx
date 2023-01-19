@@ -22,26 +22,45 @@ const Game = () => {
 
   let gamePaused = false
 
+  let gameOver = false
+  let gameWin = false
+
+  
+
+
+
   // useEffect(() => {
   //   console.log("reactman lifes left ==>", reactman.lifes)
   // }, [reactman.lifes])
 
   useEffect(() => {
+      // setWon(false)
+      // setLost(false)
+
+    console.log("level ==>", level)
+
+    gameWin = false
+    gameOver = false
     // console.log("useEffect körs")
 
     document.body.style.overflow = "hidden"
 
-
     const canvas = document.getElementById('grid')
     const ctx = canvas.getContext('2d')
 
-    // console.log("tileMap.layout ==>", tileMap.layout)
+    // console.log("ctx ==>", ctx)
 
-    let gameOver = false
-    let gameWin = false
+    // ctx.clearRect(0, 0, canvas.width, canvas.height);
+    
+    // console.log(ctx.clearRect(0, 0, canvas.width, canvas.height))
+    // console.log("tileMap.layout ==>", tileMap.layout)
+    
+    // console.log("canvas ==>", canvas)
+    
+    
 
     const gameLoop = () => {
-      // console.log("gameloop")
+      console.log("gameloop", level)
       tileMap.draw(ctx);
 
       drawGameEnd()
@@ -50,21 +69,31 @@ const Game = () => {
       ghosts.forEach(ghost => ghost.draw(ctx, pause(), reactman))
 
       // console.log("reactman.score ==>", reactman.score)
-      setScore(reactman.score)
+      setScore(score + reactman.score)
       // setLifes(reactman.lifes)
 
       checkGameOver()
       checkGameWin()
     }
+    
+    tileMap.setCanvasSize(canvas)
+    let interval = setInterval(gameLoop, 1000 / 75)
 
     const checkGameWin = () => {
+      // console.log("gameWin ==>", gameWin)
       if (!gameWin) {
         gameWin = tileMap.didWin()
 
+        // setWon(tileMap.didWin())
+
+        // console.log("gameWin ==>", gameWin)
+        // console.log("won ==>", won)
+
         if (gameWin) {
-          console.log("GE DIG FÖR FAN")
 
           const gameWinSound = new Audio(gameWinWav)
+
+          // console.log("tileMap.layout ==>", tileMap.layout)
 
           gameWinSound.play()
 
@@ -113,56 +142,109 @@ const Game = () => {
 
     const drawGameEnd = () => {
       if (gameOver || gameWin) {
-        let text = "you win"
+        let text = "You Beat The Level!"
+        let text2 = "Press button below to play again"
+
+        setWon(true)
 
         if (gameOver) {
-          text = "game over"
+          text = "Game Over!"
+
+          setWon(false)
           setLost(true)
         }
 
-        if (gameWin) {
-          setWon(true)
-        }
+        // if (gameWin) {
+        //   setWon(true)
+        // }
 
         ctx.fillStyle = "black"
-        ctx.fillRect(0, canvas.height/3.2, canvas.width, 80)
+        ctx.fillRect(0, canvas.height / 700, canvas.width, 1200)
+
+        ctx.font = '80px comic sans'
+        ctx.fillStyle = 'white'
+        ctx.fillText(text, 10, canvas.height / 2)
+
+        ctx.font = '40px comic sans'
+        ctx.fillText(text2, 10, canvas.height / 1.75)
+
+        clearInterval(interval)
       }
     }
-
-    tileMap.setCanvasSize(canvas)
-    setInterval(gameLoop, 1000 / 75)
-
   }, [level])
+
+  const nextLevel = () => {
+
+    const canvas = document.getElementById('grid')
+    const canvasParent = document.getElementById('gridParent')
+    // ctx.clear()
+    canvas.remove()
+
+    const canvas2 = document.createElement('canvas')
+    canvas2.setAttribute('id', 'grid')
+    canvas2.classList.add('bg-white')
+    canvas2.classList.add('w-[35rem]')
+    canvas2.classList.add('h-[35rem]')
+    canvas2.classList.add('mx-auto')
+    canvas2.classList.add('my-auto')
+    canvas2.classList.add('flex')
+    canvas2.classList.add('flex-wrap')
+
+    // console.log("canvas2 ==>", canvas2)
+
+    canvasParent.appendChild(canvas2)
+
+    // canvasParent.
+
+    // const clearCanvas = (ctx, canvas) => {
+    //   ctx.clearRect(0, 0, canvas.width, canvas.height);
+    //   var w = canvas.width;
+    //   canvas.width = 1;
+    //   canvas.width = w;
+    // }
+
+    // clearCanvas(ctx, canvas)
+
+    // ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+    // ctx.beginPath();
+
+    // ctx.canvas.width = ctx.canvas.width
+
+    // console.log("ctx ==>", ctx)
+
+
+    console.log("hallååå")
+    // gameWin = false
+    // setWon(false)
+
+    // tileMap.layout = tileMap.originalLayout
+
+    // tileMap.reset()
+
+    setLevel(level + 1)
+    // console.log("won ==>", won)
+  }
 
   return (
     <div tabIndex={0} >
       <h1 className="mb-5">Game</h1>
-
-
-
-      {!lost && !won ? 
         <div>
           <div onClick={() => {gamePaused = !gamePaused}} >Pause button</div>
 
-          <canvas id="grid" className="bg-white w-[35rem] h-[35rem] mx-auto my-auto flex flex-wrap " />
+          <div id="gridParent">
+            <canvas id="grid" className="bg-white w-[35rem] h-[35rem] mx-auto my-auto flex flex-wrap " />
+          </div>
 
           <h3>Score: {score}</h3>
+
+          {won ? 
+            <div onClick={() => {nextLevel()}} className="bg-white">Go to next level</div>
+          : ""}
+
+          {lost ? 
+            <div className="bg-white">Play again?</div>
+          : ""}
         </div> 
-      : lost ?
-        <div>
-          <h1>Game Over!</h1>
-
-          <h2>Final score: {score}</h2>
-        </div>
-      : won ?
-        <div>
-          <h1>You Beat The Level!</h1>
-
-          <h2>Final Score: {score}</h2>
-
-          <h3 onClick={() => {setLevel(level + 1)}}>Next Level?</h3>
-        </div>
-      : ""}
     </div>
   )
 }
