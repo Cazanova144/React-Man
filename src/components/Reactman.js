@@ -23,16 +23,14 @@ export default class Reactman {
     this.#loadReactmanImages();
 
     this.reactmanRotation = this.Rotation.right
-    this.wakaSound = new Audio(waka)
 
-    this.powerPelletSound = new Audio(power_dot)
     this.powerPelletActive = false
     this.powerPelletAboutToExpire = false
     this.timers = []
 
-    this.score = 0
+    this.lifes = 3
 
-    this.eatGhostSound = new Audio(eat_ghost)
+    this.score = 0
 
     this.madeFirstMove = false
 
@@ -43,10 +41,12 @@ export default class Reactman {
     if (!pause) {
       this.#move()
       this.#animate()
+
+      // console.log("this.x, this,y ==>", this.x, this.y)
     }
 
     this.#eatPellet()
-    this.#eatPowerPellet()
+    this.#eatPowerPellet(ghosts)
     this.#eatGhost(ghosts)
 
     const size = this.tileSize / 2
@@ -120,13 +120,7 @@ export default class Reactman {
     }
   }
 
-  #move () {
-
-    // if statement I will use later for going to the other side
-
-    // console.log("this.x ==>", this.x)
-
-    
+  #move () {    
 
     if (this.currentMovingDirection !== this.requestedMovingDirection) {
       if (
@@ -195,19 +189,35 @@ export default class Reactman {
       // add score
       this.score += 10
 
+      this.wakaSound = new Audio(waka)
+
       // play sound
-      // this.wakaSound.play()
+      this.wakaSound.play()
+
+      this.wakaSound.onended = function() {
+        // this.currentSrc = null;
+        this.src = "";
+        this.srcObject = null;
+        this.remove();
+      }
 
     }
   }
 
-  #eatPowerPellet() {
+  #eatPowerPellet(ghosts) {
     
     if (this.tileMap.eatPowerPellet(this.x, this.y)) {
 
+      this.powerPelletSound = new Audio(power_dot)
       
+      this.powerPelletSound.play()
 
-      // this.powerPelletSound.play()
+      this.powerPelletSound.onended = function() {
+        // this.currentSrc = null;
+        this.src = "";
+        this.srcObject = null;
+        this.remove();
+      }
 
       this.powerPelletActive = true
       this.powerPelletAboutToExpire = false
@@ -218,6 +228,8 @@ export default class Reactman {
         this.powerPelletActive = false
         this.powerPelletAboutToExpire = false
       }, 6 * 1000)
+      
+      // .then(ghosts.map((ghost) => ghost.eaten = false))
 
       this.timers.push(powerPelletTimer)
 
@@ -232,19 +244,37 @@ export default class Reactman {
     }
   }
 
+  // && ghost.eaten == false
+
   #eatGhost(ghosts) {
     if (this.powerPelletActive) {
       // add score
       // this.score += 100
 
+      // console.log("ghosts ==>", ghosts)
+
       const collideGhosts = ghosts.filter((ghost) => ghost.collideWith(this))
 
       collideGhosts.forEach((ghost) => {
-        ghosts.splice(ghosts.indexOf(ghost), 1)
+        // ghosts.splice(ghosts.indexOf(ghost), 1)
+
+        // ghost.eaten = true
+
+        ghost.x = ghost.starterX
+        ghost.y = ghost.starterY
 
         this.score += 100
 
+        this.eatGhostSound = new Audio(eat_ghost)
+
         this.eatGhostSound.play()
+
+        this.eatGhostSound.onended = function() {
+          // this.currentSrc = null;
+          this.src = "";
+          this.srcObject = null;
+          this.remove();
+        }
       })
     }
   }

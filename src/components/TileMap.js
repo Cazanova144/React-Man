@@ -44,7 +44,7 @@ export default class TileMap {
         [1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1],
         [1,1,1,1,1,1,0,1,1,1,1,1,0,1,1,0,1,1,1,1,1,0,1,1,1,1,1,1],
         [1,1,1,1,1,1,0,1,1,5,5,5,5,5,5,5,5,5,5,1,1,0,1,1,1,1,1,1],
-        [1,1,1,1,1,1,0,1,1,5,1,1,1,5,5,1,1,1,5,1,1,0,1,1,1,1,1,1],
+        [1,1,1,1,1,1,0,1,1,5,1,5,5,5,5,5,5,1,5,1,1,0,1,1,1,1,1,1],
         [1,1,1,1,1,1,0,1,1,5,1,6,5,5,5,5,6,1,5,1,1,0,1,1,1,1,1,1],
         [5,5,5,5,5,5,0,0,0,5,1,5,5,5,5,5,5,1,5,0,0,0,5,5,5,5,5,5],
         [1,1,1,1,1,1,0,1,1,5,1,6,5,5,5,5,6,1,5,1,1,0,1,1,1,1,1,1],
@@ -137,11 +137,18 @@ export default class TileMap {
 
                 // if tile is react-man
                 if (tile === 4) {
+
+                    // console.log("row ==>", row)
+                    // console.log("column ==>", column)
                     // this.layout[row][column] = 0;
                     return new Reactman(column * this.tileSize, row * this.tileSize, this.tileSize, velocity, this)
                 }
             }
         }
+    }
+
+    reset() {
+
     }
 
     getGhosts(velocity) {
@@ -153,9 +160,10 @@ export default class TileMap {
         for (let row = 0; row < this.layout.length; row++) {
             for (let column = 0; column < this.layout[row].length; column++) {
                 const tile = this.layout[row][column]
+                
 
                 if (tile == 6) {
-                    this.layout[row][column] = 0
+                    // this.layout[row][column] = 0
                     
                     ghosts.push(new Ghost(column * this.tileSize, row * this.tileSize, this.tileSize, velocity, this, index))
                     index++
@@ -216,11 +224,12 @@ export default class TileMap {
     }
 
     didWin() {
-        return this.#pelletsLeft === 0
-    }
+        if (this.layout.flat().filter(tile => tile === 0).length === 0) {
+            return true
+        } else {
+            return false
+        }
 
-    #pelletsLeft() {
-        return this.layout.flat().filter(tile => tile === 0).length
     }
 
     eatPellet(x, y) {

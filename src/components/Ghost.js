@@ -9,33 +9,52 @@ import scaredGhost2 from '../assets/images/scaredGhost2.png'
 
 export default class Ghost {
     constructor(x, y, tileSize, velocity, tileMap, index) {
+        this.starterX = x
+        this.starterY = y
         this.x = x
         this.y = y
         this.tileSize = tileSize
         this.velocity = velocity
         this.tileMap = tileMap
 
+        // 832 32 KOORDINATER TILL BLINKYS (RÖD) SCATTER POSITION
+
+        // console.log(this.tileMap.layout)
+
+        // set to true for start of the game
+        this.scatterMode = true
+
         // I will use this variable later to make a difference between the ghosts
         this.index = index
 
-        // console.log("index ==>", index)
 
         this.#loadImages()
 
         this.movingDirection = Math.floor(Math.random() * Object.keys(MovingDirection).length)
 
-        this.directionTimerDefault = this.#random(10, 50)
+        this.directionTimerDefault = 10
         this.directionTimer = this.directionTimerDefault
 
         this.scaredAboutToExpireTimerDefault = 10
         this.scaredAboutToExpireTimer = this.scaredAboutToExpireTimerDefault
+
+        // this.eaten = false
     }
 
     draw(ctx, pause, reactman) {
         if (!pause) {
             this.#move()
             this.#changeDirection()
+
+            
+
+            // console.log("this.tileMap.layout ==>", this.tileMap.layout)
         }
+
+        // console.log("reactman ==>", reactman.x)
+
+        this.reactmanX = reactman.x
+        this.reactmanY = reactman.y
 
         this.#setImage(ctx, reactman)
     }
@@ -44,11 +63,18 @@ export default class Ghost {
         const size = this.tileSize / 2
 
         if (this.x < reactman.x + size && this.x + size > reactman.x && this.y < reactman.y + size && this.y + size > reactman.y) {
+
+            // if (reactman.lifes > 0) {
+            //     this.tileMap.reset()
+            // }
+
             return true
         } else {
             return false
         }
     }
+
+    // && !this.eaten
 
     #setImage(ctx, reactman) {
         if (reactman.powerPelletActive) {
@@ -59,6 +85,8 @@ export default class Ghost {
             if (this.index == 1) this.image = this.blinky
             if (this.index == 2) this.image = this.clyde
             if (this.index == 3) this.image = this.inky
+
+            // this.eaten = false
             
             // this.image = this.normalGhost
         }
@@ -67,6 +95,7 @@ export default class Ghost {
     }
 
     #setImageWhenPowerPelletIsActive(reactman) {
+
         if (reactman.powerPelletAboutToExpire) {
             this.scaredAboutToExpireTimer--
 
@@ -84,26 +113,85 @@ export default class Ghost {
         }
     }
 
+    #findPath(currentX, currentY, finalX, finalY) {
+        let pathArray = []
+
+        while (currentX != finalX && currentY != finalY) {
+
+        }
+    }
+
+    #isXCoordsCloser(currentX, newX, finalX) {
+        if ((newX - finalX) > (currentX - finalX)) {
+            return true
+        } else return false
+    }
+
+    #isYCoordsCloser(currentY, newY, finalY) {
+        if ((newY - finalY) > (currentY - finalY)) {
+            return true
+        } else return false
+    }
+
+    // if (this.index === 1) {
+    // if (this.#isYCoordsCloser(this.y, this.y += this.velocity, 32)) {
+    //     console.log("going up")
+    //     console.log("this.x, this.y ==>", this.x, this.y)
+        
+    //     newMoveDirection = MovingDirection.up
+    // } else if (this.#isYCoordsCloser(this.y, this.y -= this.velocity, 32)) {
+    //     console.log("going down")
+    //     console.log("this.x, this.y ==>", this.x, this.y)
+        
+    //     newMoveDirection = MovingDirection.down
+    // } else if (this.#isXCoordsCloser(this.x, this.x += this.velocity, 32)) {
+    //     console.log("going left")
+    //     console.log("this.x, this.y ==>", this.x, this.y)
+        
+    //     newMoveDirection = MovingDirection.left
+    // } else if (this.#isXCoordsCloser(this.x, this.x -= this.velocity, 32)) {
+    //     console.log("going right")
+    //     console.log("this.x, this.y ==>", this.x, this.y)
+        
+    //     newMoveDirection = MovingDirection.right
+    // }
+    // }
+
     #changeDirection() {
         this.directionTimer--;
         let newMoveDirection = null
 
+        // console.log("this.directionTimer ==>", this.directionTimer)
+        
         if (this.directionTimer == 0) {
             this.directionTimer = this.directionTimerDefault
-
+            
             newMoveDirection = Math.floor(Math.random() * Object.keys(MovingDirection).length)
+
+
         }
+        
+        // if (this.index == 1) {
+
+        // }
 
         if (newMoveDirection != null && this.movingDirection != newMoveDirection) {
             if (Number.isInteger(this.x / this.tileSize) && Number.isInteger(this.y / this.tileSize)) {
                 if (!this.tileMap.didCollideWithEnvironment(this.x, this.y, newMoveDirection)) {
                     this.movingDirection = newMoveDirection
+                    // console.log("this.x ==>", this.x, this.index)
+                    // console.log("this.y ==>", this.y, this.index)
+                    // console.log("this.movingDirection ==>", this.movingDirection)
+
                 }
             }
         }
     }
 
     #move() {
+        // console.log(this.reactmanX)
+        // console.log("this.velocity ==>", this.velocity)
+
         if (!this.tileMap.didCollideWithEnvironment(this.x, this.y, this.movingDirection)) {
             switch(this.movingDirection) {
                 case MovingDirection.up:
@@ -123,11 +211,11 @@ export default class Ghost {
 
         // if statements for making Ghosts able to go out one side and in the other
 
-        if (!this.x && this.currentMovingDirection == MovingDirection.left) {
+        if (!this.x && this.movingDirection == MovingDirection.left) {
             this.x = 900
         }
     
-        if (this.x == 900 && this.currentMovingDirection == MovingDirection.right) {
+        if (this.x == 900 && this.movingDirection == MovingDirection.right) {
             this.x = 0
         }
     }
