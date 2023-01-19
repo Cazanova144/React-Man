@@ -46,8 +46,11 @@ export default class Ghost {
             this.#move()
             this.#changeDirection()
 
-            
+            // if (this.index == 0) {
+            //     console.log("this.x ==>", this.x)
+            //     console.log("this.starterX ==>", this.starterX)
 
+            // }
             // console.log("this.tileMap.layout ==>", this.tileMap.layout)
         }
 

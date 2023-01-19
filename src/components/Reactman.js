@@ -8,6 +8,8 @@ import eat_ghost from '../assets/sounds/eat_ghost.wav'
 
 export default class Reactman {
   constructor(x, y, tileSize, velocity, tileMap) {
+    this.starterX = x
+    this.starterY = y
     this.x = x
     this.y = y
     this.tileSize = tileSize

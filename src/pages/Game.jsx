@@ -18,6 +18,7 @@ const Game = () => {
   const [won, setWon] = useState(false)
   const [score, setScore] = useState(0)
   const [lifes, setLifes] = useState(3)
+  const [lifesInScope, setLifesInScope] = useState(3)
   const [level, setLevel] = useState(1)
 
   let gamePaused = false
@@ -25,7 +26,7 @@ const Game = () => {
   let gameOver = false
   let gameWin = false
 
-  
+  let scopedLifes = 3
 
 
 
@@ -68,7 +69,7 @@ const Game = () => {
       reactman.draw(ctx, pause(), ghosts)
       ghosts.forEach(ghost => ghost.draw(ctx, pause(), reactman))
 
-      // console.log("reactman.score ==>", reactman.score)
+      // console.log("reactman.lifes ==>", reactman.lifes)
       setScore(score + reactman.score)
       // setLifes(reactman.lifes)
 
@@ -101,6 +102,7 @@ const Game = () => {
             // this.currentSrc = null;
             this.src = "";
             this.srcObject = null;
+
             this.remove();
           }
         }
@@ -108,11 +110,26 @@ const Game = () => {
     }
 
     const checkGameOver = () => {
+
+
       if (!gameOver) {
         gameOver = isGameOver()
+        
+        // console.log("scopedLifes ==>", scopedLifes)
+
+        // console.log("gameOver ==>", gameOver)
 
         if (gameOver) {
           const gameOverSound = new Audio(gameOverWav)
+          
+          console.log("reactman.lifes in scope before substraction ==>", reactman.lifes)
+          reactman.lifes = reactman.lifes - 1
+          console.log("reactman.lifes in scope after substraction ==>", reactman.lifes)
+
+          // console.log("lifes ==>", lifes)
+          // console.log("lifesInScope ==>", lifesInScope)
+
+
 
           gameOverSound.play()
 
@@ -120,9 +137,24 @@ const Game = () => {
             // this.currentSrc = null;
             this.src = "";
             this.srcObject = null;
+
+            reactman.x = reactman.starterX
+            reactman.y = reactman.starterY
+
+            ghosts.forEach(ghost => {
+              ghost.x = ghost.starterX
+              ghost.y = ghost.starterY
+            })
+            // console.log("lifes after set ==>", lifes)
             this.remove();
+
+            // setLifes(prevCount => prevCount - 1) 
+            
+            gameOver = false
+            
+            // scopedLifes = scopedLifes - 1
           }
-        }
+        } 
       }
     }
 
@@ -137,21 +169,28 @@ const Game = () => {
       // console.log("paused ==>", paused)
       // if (paused) return true
 
+      // if (gameOver && lifes > 0) gameOver = false
+
       return !reactman.madeFirstMove || gameOver || gameWin || gamePaused
     }
 
     const drawGameEnd = () => {
-      if (gameOver || gameWin) {
+      if (gameOver && reactman.lifes == 0 || gameWin) {
         let text = "You Beat The Level!"
         let text2 = "Press button below to play again"
 
         setWon(true)
 
-        if (gameOver) {
+        if (gameOver && reactman.lifes == 0) {
           text = "Game Over!"
 
           setWon(false)
           setLost(true)
+        } else if (gameOver && reactman.lifes > 0) {
+          setWon(false)
+          setLost(false)
+
+          gameOver = false
         }
 
         ctx.fillStyle = "black"
@@ -168,6 +207,10 @@ const Game = () => {
       }
     }
   }, [level])
+
+  // useEffect(() => {
+  //   console.log("scopedLifes in useEffect ==>", scopedLifes)
+  // }, [scopedLifes])
 
   const nextLevel = () => {
     const canvas = document.getElementById('grid')
