@@ -17,7 +17,7 @@ const Game = () => {
   const [lost, setLost] = useState(false)
   const [won, setWon] = useState(false)
   const [score, setScore] = useState(0)
-  const [lifes, setLifes] = useState()
+  const [lifes, setLifes] = useState(3)
   const [level, setLevel] = useState(1)
 
   let gamePaused = false
@@ -37,7 +37,7 @@ const Game = () => {
       // setWon(false)
       // setLost(false)
 
-    console.log("level ==>", level)
+    // console.log("level ==>", level)
 
     gameWin = false
     gameOver = false
@@ -60,7 +60,7 @@ const Game = () => {
     
 
     const gameLoop = () => {
-      console.log("gameloop", level)
+      // console.log("gameloop", level)
       tileMap.draw(ctx);
 
       drawGameEnd()
@@ -154,10 +154,6 @@ const Game = () => {
           setLost(true)
         }
 
-        // if (gameWin) {
-        //   setWon(true)
-        // }
-
         ctx.fillStyle = "black"
         ctx.fillRect(0, canvas.height / 700, canvas.width, 1200)
 
@@ -174,10 +170,9 @@ const Game = () => {
   }, [level])
 
   const nextLevel = () => {
-
     const canvas = document.getElementById('grid')
     const canvasParent = document.getElementById('gridParent')
-    // ctx.clear()
+
     canvas.remove()
 
     const canvas2 = document.createElement('canvas')
@@ -190,39 +185,37 @@ const Game = () => {
     canvas2.classList.add('flex')
     canvas2.classList.add('flex-wrap')
 
-    // console.log("canvas2 ==>", canvas2)
+    canvasParent.appendChild(canvas2)
+
+    // console.log("hallååå")
+
+    setLevel(level + 1)
+  }
+
+  const restartGame = () => {
+    const canvas = document.getElementById('grid')
+    const canvasParent = document.getElementById('gridParent')
+
+    canvas.remove()
+
+    const canvas2 = document.createElement('canvas')
+    canvas2.setAttribute('id', 'grid')
+    canvas2.classList.add('bg-white')
+    canvas2.classList.add('w-[35rem]')
+    canvas2.classList.add('h-[35rem]')
+    canvas2.classList.add('mx-auto')
+    canvas2.classList.add('my-auto')
+    canvas2.classList.add('flex')
+    canvas2.classList.add('flex-wrap')
 
     canvasParent.appendChild(canvas2)
 
-    // canvasParent.
+    reactman.score = 0
+    setScore(0)
 
-    // const clearCanvas = (ctx, canvas) => {
-    //   ctx.clearRect(0, 0, canvas.width, canvas.height);
-    //   var w = canvas.width;
-    //   canvas.width = 1;
-    //   canvas.width = w;
-    // }
+    // console.log("hejdåååå")
 
-    // clearCanvas(ctx, canvas)
-
-    // ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-    // ctx.beginPath();
-
-    // ctx.canvas.width = ctx.canvas.width
-
-    // console.log("ctx ==>", ctx)
-
-
-    console.log("hallååå")
-    // gameWin = false
-    // setWon(false)
-
-    // tileMap.layout = tileMap.originalLayout
-
-    // tileMap.reset()
-
-    setLevel(level + 1)
-    // console.log("won ==>", won)
+    setLevel(1)
   }
 
   return (
@@ -238,11 +231,11 @@ const Game = () => {
           <h3>Score: {score}</h3>
 
           {won ? 
-            <div onClick={() => {nextLevel()}} className="bg-white">Go to next level</div>
+            <div onClick={() => {nextLevel()}} className="bg-white text-black">Go to next level</div>
           : ""}
 
           {lost ? 
-            <div className="bg-white">Play again?</div>
+            <div onClick={() => {restartGame()}} className="bg-white text-black">Play again?</div>
           : ""}
         </div> 
     </div>
