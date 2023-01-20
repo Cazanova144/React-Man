@@ -57,10 +57,6 @@ export default class Reactman {
     if (!pause) {
       this.#move()
       this.#animate()
-
-      // console.log(this.tileMap.didCollideWithEnvironment(this.x, this.y, this.currentMovingDirection))
-
-      // console.log("this.x, this,y ==>", this.x, this.y)
     }
 
     this.#eatPellet()
@@ -76,8 +72,6 @@ export default class Reactman {
     ctx.drawImage(this.reactmanImages[this.reactmanImageIndex], -size, -size, this.tileSize, this.tileSize)
 
     ctx.restore();
-
-    // ctx.drawImage(this.reactmanImages[this.reactmanImageIndex], this.x, this.y, this.tileSize, this.tileSize)
   }
 
   Rotation = {
@@ -88,7 +82,6 @@ export default class Reactman {
   }
 
   #loadReactmanImages() { 
-    // console.log("id in loadimages ==>", this.id)
     const reactmanImage1 = new Image();
     
     const reactmanImage2 = new Image();
@@ -108,7 +101,6 @@ export default class Reactman {
       reactmanImage3.src = react2
       reactmanImage4.src = react1
     }
-    
 
     this.reactmanImages = [reactmanImage1, reactmanImage2, reactmanImage3, reactmanImage4]
 
@@ -257,8 +249,6 @@ export default class Reactman {
         this.powerPelletActive = false
         this.powerPelletAboutToExpire = false
       }, 6 * 1000)
-      
-      // .then(ghosts.map((ghost) => ghost.eaten = false))
 
       this.timers.push(powerPelletTimer)
 
@@ -275,10 +265,6 @@ export default class Reactman {
 
   #eatFruit() {
     if (this.tileMap.eatFruit(this.x, this.y)) {
-      console.log("Funkar härifrån")
-
-      console.log("fruit through reactman class ==>", this.tileMap.currentFruit)
-
       if (this.tileMap.currentFruit === this.tileMap.cherry) this.score += 100 
       if (this.tileMap.currentFruit === this.tileMap.strawberry) this.score += 300 
       if (this.tileMap.currentFruit === this.tileMap.orange) this.score += 500 
@@ -293,29 +279,19 @@ export default class Reactman {
       this.eatFruitSound.play()
 
       this.eatFruitSound.onended = function() {
-        // this.currentSrc = null;
         this.src = "";
         this.srcObject = null;
+
         this.remove();
       }
     }
   }
 
-  // && ghost.eaten == false
-
   #eatGhost(ghosts) {
     if (this.powerPelletActive) {
-      // add score
-      // this.score += 100
-
-      // console.log("ghosts ==>", ghosts)
-
       const collideGhosts = ghosts.filter((ghost) => ghost.collideWith(this))
 
       collideGhosts.forEach((ghost) => {
-        // ghosts.splice(ghosts.indexOf(ghost), 1)
-
-        // ghost.eaten = true
 
         ghost.x = ghost.starterX
         ghost.y = ghost.starterY
@@ -327,9 +303,9 @@ export default class Reactman {
         this.eatGhostSound.play()
 
         this.eatGhostSound.onended = function() {
-          // this.currentSrc = null;
           this.src = "";
           this.srcObject = null;
+          
           this.remove();
         }
       })

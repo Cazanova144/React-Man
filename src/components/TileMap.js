@@ -23,8 +23,6 @@ export default class TileMap {
         this.tileSize = tileSize;
         this.id = id
 
-        console.log("id in tilemap ==>", id)
-
         this.pellet = new Image()
         this.powerPellet = new Image()
 
@@ -35,9 +33,6 @@ export default class TileMap {
             this.pellet.src = reactPellet
             this.powerPellet.src = reactDot
         }
-
-
-        // this.pellet = this.powerPellet
 
         this.wall = new Image()
         this.wall.src = wall
@@ -82,13 +77,9 @@ export default class TileMap {
             this.key
         ]
 
-        // this.currentFruit = null
-
         this.randomFruit = Math.floor(Math.random() * this.fruitArray.length)
 
         this.currentFruit = null
-        
-        // this.fruitArray[this.randomFruit]
         
         this.powerDot = this.powerPellet
         this.powerPelletAnimationTimerDefault = 30
@@ -171,8 +162,6 @@ export default class TileMap {
     
 
     draw (ctx) {
-
-        // console.log("this.currentFruit ==>", this.currentFruit)
         for (let row = 0; row < this.layout.length; row++) {
             for (let column = 0; column < this.layout[row].length; column++) {
                 let tile = this.layout[row][column];
@@ -206,7 +195,6 @@ export default class TileMap {
                     this.#drawPowerPellet(ctx, column, row, this.tileSize)
                 }
     
-
                 // Uncomment to see border between tiles
 
                 // ctx.strokeStyle = 'white';
@@ -229,22 +217,16 @@ export default class TileMap {
 
     #drawPowerPellet(ctx, column, row, size) {
         this.powerPelletAnimationTimer--
-        // console.log("this.powerPelletAnimationTimer ==>", this.powerPelletAnimationTimer)
 
         if (this.powerPelletAnimationTimer === 0) {
             this.powerPelletAnimationTimer = this.powerPelletAnimationTimerDefault
 
             if (this.powerDot == this.powerPellet) {
-                // console.log("powerDot ==>", this.powerDot)
                 this.powerDot = this.pellet
-                // console.log("this.powerDot ==>", this.powerDot)
             } else {
-                // console.log("powerDot ==>", this.powerDot)
                 this.powerDot = this.powerPellet
             }
         }
-
-        // console.log("this.powerDot ==>", this.powerDot)
         
         ctx.drawImage(this.powerDot, column * size, row * size, size, size)
     }
@@ -269,10 +251,6 @@ export default class TileMap {
 
                 // if tile is react-man
                 if (tile === 4) {
-
-                    // console.log("row ==>", row)
-                    // console.log("column ==>", column)
-                    // this.layout[row][column] = 0;
                     return new Reactman(column * this.tileSize, row * this.tileSize, this.tileSize, velocity, this)
                 }
             }
@@ -289,10 +267,7 @@ export default class TileMap {
             for (let column = 0; column < this.layout[row].length; column++) {
                 const tile = this.layout[row][column]
                 
-
                 if (tile == 6) {
-                    // this.layout[row][column] = 0
-                    
                     ghosts.push(new Ghost(column * this.tileSize, row * this.tileSize, this.tileSize, velocity, this, index))
                     index++
                 }
