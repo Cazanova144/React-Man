@@ -193,7 +193,7 @@ export default class Ghost {
         // console.log(this.reactmanX)
         // console.log("this.velocity ==>", this.velocity)
 
-        if (!this.tileMap.didCollideWithEnvironment(this.x, this.y, this.movingDirection)) {
+        if (!this.tileMap.didCollideWithEnvironment(this.x, this.y, this.movingDirection) && !this.tileMap.ghostCollideWithGhostDoor(this.x, this.y, this.movingDirection)) {
             switch(this.movingDirection) {
                 case MovingDirection.up:
                     this.y -= this.velocity;

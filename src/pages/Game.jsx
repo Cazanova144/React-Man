@@ -86,6 +86,8 @@ const Game = () => {
       
       
       // setLifes(reactman.lifes)
+
+      // console.log("mår du bra??")
       
       
       // if (reactman.lifes == 2) {
@@ -176,6 +178,7 @@ const Game = () => {
           // console.log("lifesInScope ==>", lifesInScope)
 
           if (lifesNextLevel) {
+            console.log("här???")
             setLifesNextLevel(prevState => prevState - 1)
           } else {
             setLifes(prevState => prevState - 1)
@@ -230,18 +233,18 @@ const Game = () => {
     }
 
     const drawGameEnd = () => {
-      if (gameOver && reactman.lifes == 0 || gameWin) {
+      if (gameOver && (reactman.lifes == 0 || lifesNextLevel === 0) || gameWin) {
         let text = "You Beat The Level!"
         let text2 = "Press button below to play again"
 
         setWon(true)
 
-        if (gameOver && reactman.lifes == 0) {
+        if (gameOver && (reactman.lifes == 0 || lifesNextLevel === 0)) {
           text = "Game Over!"
 
           setWon(false)
           setLost(true)
-        } else if (gameOver && reactman.lifes > 0) {
+        } else if (gameOver && (reactman.lifes > 0 || lifesNextLevel > 0)) {
           setWon(false)
           setLost(false)
 
@@ -261,6 +264,8 @@ const Game = () => {
 
         ctx.font = '40px comic sans'
         ctx.fillText(text2, 10, canvas.height / 1.75)
+
+        console.log("HALLÅÅÅÅÅ")
 
         clearInterval(interval)
       }
@@ -406,7 +411,7 @@ const Game = () => {
           <div onClick={() => {gamePaused = !gamePaused}} >Pause button</div>
 
           <div>
-            {lifesNextLevel !== undefined ?
+            {level > 1 && lifesNextLevel > 0 ?
               lifesNextLevel
             :
               lifes

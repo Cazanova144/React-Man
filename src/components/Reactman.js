@@ -44,11 +44,14 @@ export default class Reactman {
       this.#move()
       this.#animate()
 
+      // console.log(this.tileMap.didCollideWithEnvironment(this.x, this.y, this.currentMovingDirection))
+
       // console.log("this.x, this,y ==>", this.x, this.y)
     }
 
     this.#eatPellet()
     this.#eatPowerPellet(ghosts)
+    this.#eatFruit()
     this.#eatGhost(ghosts)
 
     const size = this.tileSize / 2
@@ -129,12 +132,12 @@ export default class Reactman {
         Number.isInteger(this.x / this.tileSize) &&
         Number.isInteger(this.y / this.tileSize)
       ) {
-          if (!this.tileMap.didCollideWithEnvironment(this.x, this.y, this.requestedMovingDirection))
+          if (!this.tileMap.didCollideWithEnvironment(this.x, this.y, this.requestedMovingDirection) && !this.tileMap.didCollideWithGhostDoor(this.x, this.y, this.requestedMovingDirection))
         this.currentMovingDirection = this.requestedMovingDirection;
       }
     }
 
-    if (this.tileMap.didCollideWithEnvironment(this.x, this.y, this.currentMovingDirection)) {
+    if (this.tileMap.didCollideWithEnvironment(this.x, this.y, this.currentMovingDirection) || this.tileMap.didCollideWithGhostDoor(this.x, this.y, this.requestedMovingDirection)) {
       this.reactmanAnimationTimer = null
       this.reactmanImageIndex = 0
       return
@@ -243,6 +246,23 @@ export default class Reactman {
 
       // add score
       this.score += 50
+    }
+  }
+
+  #eatFruit() {
+    if (this.tileMap.eatFruit(this.x, this.y)) {
+      console.log("Funkar härifrån")
+
+      console.log("fruit through reactman class ==>", this.tileMap.currentFruit)
+
+      if (this.tileMap.currentFruit === this.tileMap.cherry) this.score += 100 
+      if (this.tileMap.currentFruit === this.tileMap.strawberry) this.score += 300 
+      if (this.tileMap.currentFruit === this.tileMap.orange) this.score += 500 
+      if (this.tileMap.currentFruit === this.tileMap.apple) this.score += 700 
+      if (this.tileMap.currentFruit === this.tileMap.melon) this.score += 1000 
+      if (this.tileMap.currentFruit === this.tileMap.banana) this.score += 2000 
+      if (this.tileMap.currentFruit === this.tileMap.bell) this.score += 3000 
+      if (this.tileMap.currentFruit === this.tileMap.key) this.score += 5000 
     }
   }
 
