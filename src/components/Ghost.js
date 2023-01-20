@@ -67,9 +67,7 @@ export default class Ghost {
 
         if (this.x < reactman.x + size && this.x + size > reactman.x && this.y < reactman.y + size && this.y + size > reactman.y) {
 
-            // if (reactman.lifes > 0) {
-            //     this.tileMap.reset()
-            // }
+            reactman.lifes = reactman.lifes - 1
 
             return true
         } else {
