@@ -1,16 +1,21 @@
 import { React, useEffect, useState } from 'react'
+import { useParams, useLocation } from 'react-router-dom'
 import TileMap from '../components/TileMap'
 import gameOverWav from '../assets/sounds/gameOver.wav'
 import gameWinWav from '../assets/sounds/gameWin.wav'
 
 const Game = () => {
 
-  
+  // console.log("choice ==>", choice)
+
+  const {id} = useParams()
+
+  console.log("id ==>", id)
+
   const tileSize = 32
   const velocity = 2
-
   
-  const tileMap = new TileMap(tileSize)
+  const tileMap = new TileMap(tileSize, id)
   const reactman = tileMap.getReactman(velocity)
   const ghosts = tileMap.getGhosts(velocity)
   
@@ -110,6 +115,9 @@ const Game = () => {
 
       // console.log("reactman lifes left ==>", reactman.lifes)
       // console.log("lifes ==>", lifes)
+
+      // console.log("id in loop ==>", id)
+
 
       drawGameEnd()
 

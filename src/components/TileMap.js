@@ -14,15 +14,28 @@ import banana from '../assets/images/banana.png'
 import bell from '../assets/images/bell.png'
 import key from '../assets/images/key.png'
 
+// react-man images
+import reactPellet from '../assets/images/reactPellet.png'
+import reactDot from '../assets/images/reactDot.png'
+
 export default class TileMap {
-    constructor (tileSize) {
+    constructor (tileSize, id) {
         this.tileSize = tileSize;
+        this.id = id
+
+        console.log("id in tilemap ==>", id)
 
         this.pellet = new Image()
-        this.pellet.src = pellet
-
         this.powerPellet = new Image()
-        this.powerPellet.src = powerPellet
+
+        if (this.id == 1) {
+            this.pellet.src = pellet
+            this.powerPellet.src = powerPellet
+        } else if (this.id == 2) {
+            this.pellet.src = reactPellet
+            this.powerPellet.src = reactDot
+        }
+
 
         // this.pellet = this.powerPellet
 

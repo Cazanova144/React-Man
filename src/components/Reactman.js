@@ -7,6 +7,17 @@ import power_dot from '../assets/sounds/power_dot.wav'
 import eat_ghost from '../assets/sounds/eat_ghost.wav'
 import eat_fruit from '../assets/sounds/eat_fruit.mp3'
 
+// ms pac-man images
+import mspac0 from '../assets/images/mspac0.png'
+import mspac1 from '../assets/images/mspac1.png'
+import mspac2 from '../assets/images/mspac2.png'
+
+// react-man images
+import react0 from '../assets/images/react0.png'
+import react1 from '../assets/images/react1.png'
+import react2 from '../assets/images/react2.png'
+
+
 export default class Reactman {
   constructor(x, y, tileSize, velocity, tileMap) {
     this.starterX = x
@@ -16,6 +27,8 @@ export default class Reactman {
     this.tileSize = tileSize
     this.velocity = velocity
     this.tileMap = tileMap
+
+    this.id = this.tileMap.id
 
     this.currentMovingDirection = null
     this.requestedMovingDirection = null
@@ -74,18 +87,28 @@ export default class Reactman {
     up: 3
   }
 
-  #loadReactmanImages() {
+  #loadReactmanImages() { 
+    // console.log("id in loadimages ==>", this.id)
     const reactmanImage1 = new Image();
-    reactmanImage1.src = pac0
-
+    
     const reactmanImage2 = new Image();
-    reactmanImage2.src = pac1
-
+    
     const reactmanImage3 = new Image();
-    reactmanImage3.src = pac2
-
+    
     const reactmanImage4 = new Image();
-    reactmanImage4.src = pac1
+
+    if (this.id == 1) {
+      reactmanImage1.src = pac0
+      reactmanImage2.src = pac1
+      reactmanImage3.src = pac2
+      reactmanImage4.src = pac1
+    } else if (this.id == 2) {
+      reactmanImage1.src = react0
+      reactmanImage2.src = react1
+      reactmanImage3.src = react2
+      reactmanImage4.src = react1
+    }
+    
 
     this.reactmanImages = [reactmanImage1, reactmanImage2, reactmanImage3, reactmanImage4]
 
