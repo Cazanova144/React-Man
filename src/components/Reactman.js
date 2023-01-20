@@ -5,6 +5,7 @@ import pac2 from '../assets/images/pac2.png'
 import waka from '../assets/sounds/waka.wav'
 import power_dot from '../assets/sounds/power_dot.wav'
 import eat_ghost from '../assets/sounds/eat_ghost.wav'
+import eat_fruit from '../assets/sounds/eat_fruit.mp3'
 
 export default class Reactman {
   constructor(x, y, tileSize, velocity, tileMap) {
@@ -263,6 +264,17 @@ export default class Reactman {
       if (this.tileMap.currentFruit === this.tileMap.banana) this.score += 2000 
       if (this.tileMap.currentFruit === this.tileMap.bell) this.score += 3000 
       if (this.tileMap.currentFruit === this.tileMap.key) this.score += 5000 
+
+      this.eatFruitSound = new Audio(eat_fruit)
+
+      this.eatFruitSound.play()
+
+      this.eatFruitSound.onended = function() {
+        // this.currentSrc = null;
+        this.src = "";
+        this.srcObject = null;
+        this.remove();
+      }
     }
   }
 
