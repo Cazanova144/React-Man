@@ -26,7 +26,7 @@ export default class TileMap {
         this.pellet = new Image()
         this.powerPellet = new Image()
 
-        if (this.id == 1) {
+        if (this.id == 1 || this.id == 3) {
             this.pellet.src = pellet
             this.powerPellet.src = powerPellet
         } else if (this.id == 2) {

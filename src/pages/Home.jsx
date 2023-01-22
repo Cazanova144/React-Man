@@ -12,6 +12,10 @@ const Home = () => {
         </Link>
 
         <Link to={"/game/2"}>
+          <button>Play as React-Man?</button>
+        </Link>
+
+        <Link to={"/game/3"}>
           <button>Play as Ms Pac-Man?</button>
         </Link>
     </div>

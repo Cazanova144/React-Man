@@ -68,7 +68,13 @@ export default class Reactman {
 
     ctx.save()
     ctx.translate(this.x + size, this.y + size)
-    ctx.rotate((this.reactmanRotation * 90 * Math.PI) / 180)
+
+    if (this.currentMovingDirection === MovingDirection.left) {
+      ctx.scale(-1, 1);
+    } else {
+      ctx.rotate((this.reactmanRotation * 90 * Math.PI) / 180)
+    }
+
     ctx.drawImage(this.reactmanImages[this.reactmanImageIndex], -size, -size, this.tileSize, this.tileSize)
 
     ctx.restore();
@@ -100,6 +106,11 @@ export default class Reactman {
       reactmanImage2.src = react1
       reactmanImage3.src = react2
       reactmanImage4.src = react1
+    } else if (this.id == 3) {
+      reactmanImage1.src = mspac0
+      reactmanImage2.src = mspac1
+      reactmanImage3.src = mspac2
+      reactmanImage4.src = mspac1
     }
 
     this.reactmanImages = [reactmanImage1, reactmanImage2, reactmanImage3, reactmanImage4]
@@ -305,7 +316,7 @@ export default class Reactman {
         this.eatGhostSound.onended = function() {
           this.src = "";
           this.srcObject = null;
-          
+
           this.remove();
         }
       })
