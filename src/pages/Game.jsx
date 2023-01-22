@@ -18,7 +18,7 @@ const Game = () => {
   const [lost, setLost] = useState(false)
   const [won, setWon] = useState(false)
   const [score, setScore] = useState(0)
-  const [lifes, setLifes] = useState(1)
+  const [lifes, setLifes] = useState(3)
   const [lifesNextLevel, setLifesNextLevel] = useState()
   const [level, setLevel] = useState(1)
   const [triggerRestart, setTriggerRestart] = useState(false)
