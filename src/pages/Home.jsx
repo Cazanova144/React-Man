@@ -1,23 +1,27 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import Game from './Game'
+import ReactmanLogo from '../assets/images/React-man logo.png'
 
 const Home = () => {
   return (
-    <div>
-        <h1>React-Man</h1>
+    <div className="flex flex-col">
+        <div className="w-[40rem] flex place-self-center">
+          <img src={ReactmanLogo} alt="React-Man logo" className="w-max flex justify-center align-middle" />
+        </div>
 
-        <Link to={"/game/1"}>
-          <button>Play as Pac-Man?</button>
-        </Link>
+        <div className="flex justify-around">
+          <Link to={"/game/1"} className="bg-blue-800 w-52 rounded-md">
+            <button>Play as Pac-Man?</button>
+          </Link>
 
-        <Link to={"/game/2"}>
-          <button>Play as React-Man?</button>
-        </Link>
+          <Link to={"/game/2"} className="bg-blue-800 w-52 rounded-md">
+            <button>Play as React-Man?</button>
+          </Link>
 
-        <Link to={"/game/3"}>
-          <button>Play as Ms Pac-Man?</button>
-        </Link>
+          <Link to={"/game/3"} className="bg-blue-800 w-52 rounded-md">
+            <button>Play as Ms Pac-Man?</button>
+          </Link>
+        </div>
     </div>
   )
 }

@@ -1,9 +1,10 @@
 import { React, useEffect, useState } from 'react'
-import { useParams, useLocation } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import TileMap from '../components/TileMap'
 import gameOverWav from '../assets/sounds/gameOver.wav'
 import gameWinWav from '../assets/sounds/gameWin.wav'
-
+import ReactmanLogo from '../assets/images/React-man logo.png'
+ 
 const Game = () => {
   const {id} = useParams()
 
@@ -217,17 +218,23 @@ const Game = () => {
     }
   }, [lifes, lifesNextLevel])
 
-  return (
-    <div tabIndex={0} >
-      <h1 className="mb-5">Game</h1>
-        <div>
-          <div onClick={() => {}} >Pause button</div>
+  // tabIndex={0}
 
-          <div>
+  return (
+    <div  className="flex flex-col" >
+      <div className="w-[40rem] flex place-self-center">
+        <img src={ReactmanLogo} alt="React-Man logo" className="w-max flex justify-center align-middle" />
+      </div>
+        <div>
+          <div className="h-8">
             {level > 1 && lifesNextLevel > 0 ?
-              lifesNextLevel
+              `${lifesNextLevel} lifes left`
+            : level == 1 && lifes !== 0 ?
+              `${lifes} lifes left`
+            : lifes == 0 || lifesNextLevel == 0 ?
+             ""
             :
-              lifes
+              ""
             }
           </div>
 
@@ -235,7 +242,9 @@ const Game = () => {
             <canvas id="grid" className="bg-white w-[35rem] h-[35rem] mx-auto my-auto flex flex-wrap " />
           </div>
 
-          <h3>Score: {score}</h3>
+          <div className="">
+              <h3>Score: {score}</h3>
+          </div>
 
           {won ? 
             <div onClick={() => {nextLevel()}} className="bg-white text-black">Go to next level</div>
