@@ -1,5 +1,5 @@
 import { React, useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams, Link } from 'react-router-dom'
 import TileMap from '../components/TileMap'
 import gameOverWav from '../assets/sounds/gameOver.wav'
 import gameWinWav from '../assets/sounds/gameWin.wav'
@@ -18,7 +18,7 @@ const Game = () => {
   const [lost, setLost] = useState(false)
   const [won, setWon] = useState(false)
   const [score, setScore] = useState(0)
-  const [lifes, setLifes] = useState(3)
+  const [lifes, setLifes] = useState(1)
   const [lifesNextLevel, setLifesNextLevel] = useState()
   const [level, setLevel] = useState(1)
   const [triggerRestart, setTriggerRestart] = useState(false)
@@ -247,11 +247,19 @@ const Game = () => {
           </div>
 
           {won ? 
-            <div onClick={() => {nextLevel()}} className="bg-white text-black">Go to next level</div>
+            <div className="flex justify-center">
+              <div onClick={() => {nextLevel()}} className="bg-blue-800 w-52 rounded-md">
+                Go to next level
+              </div>
+            </div>
           : ""}
 
           {lost ? 
-            <div onClick={() => {restartGame()}} className="bg-white text-black">Play again?</div>
+            <div onClick={() => {restartGame()}} className="flex justify-center" >
+              <Link to={"/"} className="bg-blue-800 w-52 rounded-md">
+                <button>Play again?</button>
+              </Link>
+            </div>
           : ""}
         </div> 
     </div>
