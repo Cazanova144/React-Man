@@ -1,5 +1,4 @@
 import MovingDirection from './MovingDirection'
-import ghost from '../assets/images/ghost.png'
 import blinky from '../assets/images/blinky.png'
 import inky from '../assets/images/inky.png'
 import pinky from '../assets/images/pinky.png'
@@ -159,9 +158,6 @@ export default class Ghost {
 
         this.clyde = new Image()
         this.clyde.src = clyde
-
-        this.normalGhost = new Image();
-        this.normalGhost.src = ghost
         
         this.scaredGhost = new Image()
         this.scaredGhost.src = scaredGhost
