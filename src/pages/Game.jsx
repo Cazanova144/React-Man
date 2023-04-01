@@ -32,7 +32,13 @@ const Game = () => {
     gameWin = false
     gameOver = false
 
-    document.body.style.overflow = "hidden"
+    // Added this to prevent arrow keys from scrolling on smaller screens
+
+    window.addEventListener("keydown", function(e) {
+      if(["Space","ArrowUp","ArrowDown","ArrowLeft","ArrowRight"].indexOf(e.code) > -1) {
+          e.preventDefault();
+      }
+    }, false);
 
     const canvas = document.getElementById('grid')
     const ctx = canvas.getContext('2d')
@@ -222,8 +228,8 @@ const Game = () => {
 
   return (
     <div  className="flex flex-col" >
-      <div className="w-[40rem] flex place-self-center">
-        <img src={ReactmanLogo} alt="React-Man logo" className="w-max flex justify-center align-middle" />
+      <div className="w-[45vw] xl:w-[35vw] 2xl:w-[25vw] flex place-self-center">
+        <img src={ReactmanLogo} alt="React-Man logo" className="w-full flex justify-center align-middle" />
       </div>
         <div>
           <div className="h-8">
@@ -239,7 +245,7 @@ const Game = () => {
           </div>
 
           <div id="gridParent">
-            <canvas id="grid" className="bg-white w-[35rem] h-[35rem] mx-auto my-auto flex flex-wrap " />
+            <canvas id="grid" className="bg-white w-[45vw] xl:w-[35vw] 2xl:w-[25vw] aspect-square mx-auto my-auto flex flex-wrap " />
           </div>
 
           <div className="">

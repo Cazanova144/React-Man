@@ -5,8 +5,8 @@ import ReactmanLogo from '../assets/images/React-man logo.png'
 const Home = () => {
   return (
     <div className="flex flex-col">
-        <div className="w-[40rem] flex place-self-center">
-          <img src={ReactmanLogo} alt="React-Man logo" className="w-max flex justify-center align-middle" />
+        <div className="w-[45vw] xl:w-[35vw] 2xl:w-[25vw] flex place-self-center">
+          <img src={ReactmanLogo} alt="React-Man logo" className="w-full flex justify-center align-middle" />
         </div>
 
         <div className="flex justify-around">
